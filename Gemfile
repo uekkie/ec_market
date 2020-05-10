@@ -12,6 +12,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'hamlit-rails'
 gem 'rails-i18n'
+gem 'simple_form'
+gem 'stripe'
+gem 'active_hash'
 
 gem 'devise'
 gem 'devise-i18n'
