@@ -23,6 +23,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
   gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :development do
@@ -32,6 +33,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'binding_of_caller'
   gem 'bullet'
+  gem 'spring-commands-rspec'
 end
 
 group :test do
