@@ -30,7 +30,7 @@ RSpec.describe "Users", type: :system do
       expect {
         click_button 'カートに追加'
         expect(current_path).to eq item_path(item)
-      }.to change { user.cart_items.count }.by(1)
+      }.to change { CartItem.count }.by(1)
     end
   end
 

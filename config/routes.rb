@@ -10,7 +10,5 @@ Rails.application.routes.draw do
   post '/update_item' => 'carts#update_item'
   delete '/delete_item' => 'carts#delete_item'
 
-  resources :cart_items, only: %i[create destroy]
-
   resources :orders, only: %i[new create]
 end
