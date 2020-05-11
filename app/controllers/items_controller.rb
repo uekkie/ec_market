@@ -6,6 +6,7 @@ class ItemsController < ApplicationController
   end
 
   def show
+    @cart_item = current_cart.cart_items.build
   end
 
   private

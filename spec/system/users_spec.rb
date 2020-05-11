@@ -33,4 +33,28 @@ RSpec.describe "Users", type: :system do
       }.to change { user.cart_items.count }.by(1)
     end
   end
+
+  context 'カートに商品が入っているとき' do
+    before { sign_in user }
+    let!(:item) { create(:item, name: "りんご", price: 300) }
+    let!(:cart_item) { create(:cart_item, user: user, item: item, quantity: 1) }
+
+    it '商品を購入できる' do
+      visit cart_users_path
+
+      # within '.items' do
+      #   expect(page).to have_content 'りんご'
+      # end
+      #
+      select '配送時間帯', from: '8-12'
+
+      within '.amount' do
+        expect(page).to have_content '300円'
+      end
+
+      expect {
+        click_on '購入する'
+      }.to change { ShippingItem.count }.by(1)
+    end
+  end
 end

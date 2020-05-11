@@ -1,0 +1,5 @@
+=render 'carts/item_list', cart_items: @cart_items, editable_quantity: false
+
+= simple_form_for @order do |f|
+  = f.input :address
+  = f.button :submit, '購入する'

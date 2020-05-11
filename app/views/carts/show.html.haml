@@ -1,0 +1,5 @@
+%h3 カートの中身
+
+=render 'carts/item_list', cart_items: @cart_items, editable_quantity: true
+
+=link_to '購入に進む', new_order_path
