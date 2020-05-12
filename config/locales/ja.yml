@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    model:
+      user: ユーザー
+    attributes:
+  time:
+    formats:
+      short_jp: "%Y年%m月%d日"
+  date:
+    formats:
+      short_date: "%Y-%m-%d"
+  datetime:
+    formats:
+      short_jp: "%Y年%m月%d日"

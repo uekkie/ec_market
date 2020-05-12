@@ -25,6 +25,7 @@ RSpec.describe "Users", type: :system do
     before { sign_in user }
     let!(:item) { create(:item, name: "りんご", price: 300) }
 
+
     it "商品をカートに入れられる" do
       visit item_path(item)
       expect {

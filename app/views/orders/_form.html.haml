@@ -2,4 +2,7 @@
 
 = simple_form_for @order do |f|
   = f.input :address
+  = f.input :ship_time, as: :select, collection: ShipTime.range
+  = f.input :ship_date, as: :select,
+         collection: Order.business_days
   = f.button :submit, '購入する'

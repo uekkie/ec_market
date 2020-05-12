@@ -54,6 +54,10 @@ ActiveRecord::Schema.define(version: 2020_05_11_132029) do
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "address", null: false
+    t.string "ship_time", null: false
+    t.date "ship_date", null: false
+    t.integer "total_price", null: false
+    t.integer "tax", default: 8, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
@@ -65,6 +69,9 @@ ActiveRecord::Schema.define(version: 2020_05_11_132029) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.string "name", default: "", null: false
+    t.string "address", default: "", null: false
+    t.string "stripe_customer_id", default: "", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true

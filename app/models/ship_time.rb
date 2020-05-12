@@ -7,4 +7,8 @@ class ShipTime < ActiveHash::Base
       { id: 5, value: "18-20" },
       { id: 6, value: "20-21" },
   ]
+
+  def self.range
+    data.map { |e| e[:value] }
+  end
 end
