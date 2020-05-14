@@ -1,7 +1,8 @@
 class Cart < ApplicationRecord
   has_many :cart_items
 
-  def total_price
+  def subtotal
     cart_items.sum(&:subtotal)
   end
+
 end

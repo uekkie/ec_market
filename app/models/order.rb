@@ -3,6 +3,9 @@ class Order < ApplicationRecord
     self.total_price = total_with_tax
   end
 
+  belongs_to :user
+  validates :address, :ship_time, :ship_date, presence: true
+
   has_many :order_items
 
   def build_order_items(cart)
@@ -21,6 +24,10 @@ class Order < ApplicationRecord
 
   def amount
     order_items.sum(&:quantity)
+  end
+
+  def tax_fee
+    (total * 8 / 100)
   end
 
   def delivery_fee

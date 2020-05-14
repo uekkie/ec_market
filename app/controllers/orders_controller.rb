@@ -1,7 +1,9 @@
 class OrdersController < ApplicationController
   def new
-    @order      = Order.new
-    @cart_items = current_cart.cart_items
+    @order = Order.new do |order|
+      order.build_order_items(current_cart)
+      order
+    end
   end
 
   def create
@@ -10,17 +12,19 @@ class OrdersController < ApplicationController
       return
     end
 
-    order = current_user.orders.build(order_params) do |order|
-      order.ship_date = Date.parse(params[:order][:ship_date])
-      order.build_order_items(current_cart)
+    @order = current_user.orders.build(order_params) do |order|
+      if params[:order][:ship_date].present?
+        order.ship_date = Date.parse(params[:order][:ship_date])
+        order.build_order_items(current_cart)
+      end
       order
     end
 
-    if order.save
+    if @order.save
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'
     else
-      redirect_to new_order_url, notice: ''
+      render :new
     end
   end
 
