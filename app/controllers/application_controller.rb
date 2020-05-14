@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
     cart
   end
 
+  def clear_current_cart
+    session[:cart_id] = nil
+  end
+
   helper_method :current_cart
 
 end

@@ -4,5 +4,7 @@
   = f.input :address
   = f.input :ship_time, as: :select, collection: ShipTime.range
   = f.input :ship_date, as: :select,
-         collection: Order.business_days
+         collection: Order.business_days,
+         label_method: :second,
+         value_method: :first
   = f.button :submit, '購入する'
