@@ -1,0 +1,11 @@
+%h1 商品一覧
+
+%ul
+- @items.each do |item|
+  %li
+    - if item.image.present?
+      =image_tag(item.image, size: '100')
+    - else
+      .noimage 写真
+
+    =link_to item.name, item_path(item)
