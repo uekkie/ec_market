@@ -1,4 +1,11 @@
 ja:
+  time:
+    formats:
+      short: "%Y年%m月%d日"
+  date:
+    formats:
+      with_wday: "%Y年%m月%d日 %a曜日"
+      short: "%Y年%m月%d日"
   activerecord:
     model:
       user: ユーザー
@@ -21,13 +28,4 @@ ja:
         ship_time: 配送時間帯
         ship_date: 配達日
 
-  time:
-    formats:
-      short_jp: "%Y年%m月%d日"
-  date:
-    formats:
-      short_date: "%Y-%m-%d"
-  datetime:
-    formats:
-      short_jp: "%Y年%m月%d日"
 

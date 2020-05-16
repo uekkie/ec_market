@@ -1,6 +1,14 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    @orders = current_user.orders
+  end
+
+  def show
+
+  end
+
   def new
     @order = current_user.orders.build do |order|
       order.build_order_items(current_cart)

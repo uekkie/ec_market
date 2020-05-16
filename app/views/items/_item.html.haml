@@ -1,17 +1,5 @@
 .card{style:"width: 20rem;"}
-  - if item.image.present?
-    %img{class: "card-img-top", src: item.image}
-  - else
-    %svg.bd-placeholder-img.card-img-top{width:"100%",
-     height:"180",
-     xmlns:"http://www.w3.org/2000/svg",
-     preserveAspectRatio:"xMidYMid slice",
-     focusable:"false",
-     role:"img" }
-      %title= item.name
-      %rect{fill:"#868e96", width: "100%", height: "100%"}
-      %text{fill:"#dee2e6", dy:".3em", x:"40%", y:"50%"}
-        画像なし
+  = render 'item_image', item: item
   .card-body
     %p.card-text
       = number_to_currency(item.price)
