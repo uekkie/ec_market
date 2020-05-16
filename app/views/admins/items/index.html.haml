@@ -1,6 +1,6 @@
-%h1 商品一覧
+%h1 商品管理
 
-- if admin_signed_in?
+- if current_user.admin?
   = link_to '商品の追加', new_admins_item_path, class: 'btn btn-primary'
 
 - @items.each do |item|
