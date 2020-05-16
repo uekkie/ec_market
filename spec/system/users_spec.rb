@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :system do
-  before do
-    driven_by(:rack_test)
-  end
   let!(:user) { create(:user) }
 
   it "ログイン後、トップ画面にリダイレクトされる" do
@@ -38,24 +35,25 @@ RSpec.describe "Users", type: :system do
   context 'カートに商品が入っているとき' do
     before { sign_in user }
     let!(:item) { create(:item, name: "りんご", price: 300) }
-    let!(:cart_item) { create(:cart_item, user: user, item: item, quantity: 1) }
+    # let!(:cart) {
+    #   cart = Cart.create
+    #   session[:cart_id] = cart.id
+    #   cart.cart_items.create(item: item, quantity: 2)
+    #   cart
+    # }
 
     it '商品を購入できる' do
-      visit cart_users_path
+      visit item_path(item)
+      click_on 'カートに追加'
 
-      # within '.items' do
-      #   expect(page).to have_content 'りんご'
-      # end
-      #
-      select '配送時間帯', from: '8-12'
+      visit new_order_path #
 
-      within '.amount' do
-        expect(page).to have_content '300円'
-      end
+      fill_in '送り先', with: user.address
+      select '8時〜12時', from: '配送時間帯'
 
       expect {
-        click_on '購入する'
-      }.to change { ShippingItem.count }.by(1)
+        click_on '購入を確定する'
+      }.to change { Order.count }.by(1)
     end
   end
 end
