@@ -19,6 +19,18 @@ class Admins::ItemsController < ApplicationController
     end
   end
 
+  def up_position
+    item = Item.find(params[:id])
+    item.decrement_position
+    redirect_to admins_items_url
+  end
+
+  def down_position
+    item = Item.find(params[:id])
+    item.increment_position
+    redirect_to admins_items_url
+  end
+
   private
 
   def item_params

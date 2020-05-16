@@ -1,8 +1,5 @@
 %h1 商品一覧
 
-- if admin_signed_in?
-  = link_to '商品の追加', new_admins_item_path, class: 'btn btn-primary'
-
 - @items.each do |item|
   .card{style:"width: 20rem;"}
     - if item.image.present?
