@@ -19,6 +19,8 @@
         %text{fill:"#dee2e6", dy:".3em", x:"40%", y:"50%"}
           画像なし
     .card-body
-      %h5.card-title= link_to item.name, item_path(item)
+      %h5.card-title= item.name
       %p.card-text= item.description
       =render 'admins/items/move_positions', item: item
+      =link_to '編集', edit_admins_item_path(item)
+      =link_to '削除', admins_item_path(item), method: :delete, data: {confirm: '削除しますか？'}

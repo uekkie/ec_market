@@ -1,16 +1,24 @@
 class Admins::ItemsController < ApplicationController
   before_action :admin_signed_in?
+  before_action :set_item, only: %i[show edit update destroy up_position down_position]
 
   def index
-    @items = Item.all.order(:position)
+    @items = current_shop.items
+  end
+
+  def show
+
   end
 
   def new
-    @item = Item.new
+    @item = current_shop.items.new
+  end
+
+  def edit
   end
 
   def create
-    @item = Item.new(item_params)
+    @item = current_shop.items.build(item_params)
 
     if @item.save
       redirect_to admins_items_url, notice: '商品を登録しました'
@@ -19,14 +27,25 @@ class Admins::ItemsController < ApplicationController
     end
   end
 
+  def update
+    if @item.update(item_params)
+      redirect_to admins_item_path(@item), notice: '変更しました'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @item.destroy!
+    redirect_to admins_items_url, notice: "#{@item.name}を削除しました"
+  end
+
   def up_position
-    item = Item.find(params[:id])
     item.decrement_position
     redirect_to admins_items_url
   end
 
   def down_position
-    item = Item.find(params[:id])
     item.increment_position
     redirect_to admins_items_url
   end
@@ -35,5 +54,9 @@ class Admins::ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(%i[name price description image hidden position])
+  end
+
+  def set_item
+    @item = Item.find(params[:id])
   end
 end
