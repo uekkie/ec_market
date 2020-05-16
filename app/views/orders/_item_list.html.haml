@@ -1,0 +1,36 @@
+%h4 購入の確認
+
+%table.table.table-striped
+  %thead
+    %th 商品名
+    %th 個数
+    %th 金額
+  %tbody
+    - order.order_items.each do | order_item |
+      %tr
+        %td= order_item.item.name
+        %td
+          = order_item.quantity
+        %td
+          = number_to_currency(order_item.subtotal)
+    %tr
+      %td 小計
+      %td
+      %td= number_to_currency(order.subtotal)
+
+%h4 手数料・消費税等
+%table.table.table-striped
+  %tbody
+    %tr
+      %td 代引き手数料
+      %td= number_to_currency(order.delivery_fee)
+    %tr
+      %td 送料
+      %td= number_to_currency(order.postage)
+
+    %tr
+      %td 消費税
+      %td= number_to_currency(order.tax_fee)
+    %tr
+      %td 合計
+      %td= number_to_currency(order.total_with_tax)

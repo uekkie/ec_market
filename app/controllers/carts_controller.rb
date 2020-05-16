@@ -5,11 +5,6 @@ class CartsController < ApplicationController
     @cart_items = current_cart.cart_items
   end
 
-  def new
-    @cart_item = current_cart.cart_items.new
-  end
-
-
   def add_item
     if @cart_items.blank?
       @cart_item = current_cart.cart_items.find_or_initialize_by(item_id: params[:cart_item][:item_id])
@@ -23,12 +18,12 @@ class CartsController < ApplicationController
 
   def update_item
     @cart_item.update(quantity: params[:quantity].to_i)
-    redirect_to carts_url
+    redirect_to cart_url
   end
 
   def delete_item
     @cart_item.destroy
-    redirect_to carts_url
+    redirect_to cart_url
   end
 
   private
