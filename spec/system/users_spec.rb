@@ -35,12 +35,6 @@ RSpec.describe "Users", type: :system do
   context 'カートに商品が入っているとき' do
     before { sign_in user }
     let!(:item) { create(:item, name: "りんご", price: 300) }
-    # let!(:cart) {
-    #   cart = Cart.create
-    #   session[:cart_id] = cart.id
-    #   cart.cart_items.create(item: item, quantity: 2)
-    #   cart
-    # }
 
     it '商品を購入できる' do
       visit item_path(item)
