@@ -1,5 +1,4 @@
-class Admins::ItemsController < ApplicationController
-  before_action :admin_signed_in?
+class Admins::ItemsController < Admins::ApplicationController
   before_action :set_item, only: %i[show edit update destroy up_position down_position]
 
   def index
@@ -7,7 +6,6 @@ class Admins::ItemsController < ApplicationController
   end
 
   def show
-
   end
 
   def new
@@ -58,5 +56,11 @@ class Admins::ItemsController < ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def authenticate_admin
+    unless admin_signed_in?
+      redirect_to new_session_url, alert: '管理者でログインしてください'
+    end
   end
 end

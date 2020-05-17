@@ -5,6 +5,9 @@
 
 - @items.each do |item|
   .card{style:"width: 20rem;"}
+    .card-header
+      = item.hidden ? "非表示" : "表示"
+
     = render 'items/item_image', item: item
     .card-body
       %h5.card-title= item.name
