@@ -4,8 +4,8 @@
   = link_to '商品の追加', new_admins_item_path, class: 'btn btn-primary'
 
 - @items.each do |item|
-  .card{style:"width: 20rem;"}
-    .card-header
+  .card.mt-2.mb-2{style:"width: 20rem;"}
+    .card-header.alert{ class: item.hidden ? "alert-danger" : "alert-success"}
       = item.hidden ? "非表示" : "表示"
 
     = render 'items/item_image', item: item

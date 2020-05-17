@@ -9,7 +9,7 @@ class Admins::ItemsController < Admins::ApplicationController
   end
 
   def new
-    @item = current_shop.items.new
+    @item = current_shop.items.build
   end
 
   def edit
@@ -56,11 +56,5 @@ class Admins::ItemsController < Admins::ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
-  end
-
-  def authenticate_admin
-    unless admin_signed_in?
-      redirect_to new_session_url, alert: '管理者でログインしてください'
-    end
   end
 end
