@@ -5,4 +5,6 @@
   = f.input :name
   = f.input :price
   = f.input :description
+  = image_tag(@item.image.to_s)
+  = f.file_field :image
   = f.button :submit, class: 'btn btn-primary'

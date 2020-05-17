@@ -41,12 +41,12 @@ class Admins::ItemsController < ApplicationController
   end
 
   def up_position
-    item.decrement_position
+    @item.decrement_position
     redirect_to admins_items_url
   end
 
   def down_position
-    item.increment_position
+    @item.increment_position
     redirect_to admins_items_url
   end
 

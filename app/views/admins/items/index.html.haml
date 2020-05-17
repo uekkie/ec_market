@@ -5,7 +5,7 @@
 
 - @items.each do |item|
   .card{style:"width: 20rem;"}
-    = render 'item_image', item: item
+    = render 'items/item_image', item: item
     .card-body
       %h5.card-title= item.name
       %p.card-text= item.description
