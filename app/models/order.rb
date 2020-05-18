@@ -55,7 +55,7 @@ class Order < ApplicationRecord
   end
 
   def total_with_tax
-    (total + (total * 8 / 100)).round(-1)
+    (total + tax_fee).round(-1)
   end
 
 end
