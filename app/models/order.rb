@@ -8,6 +8,8 @@ class Order < ApplicationRecord
 
   has_many :order_items
 
+  POSTAGE_FEE = 600
+
   def build_order_items(cart)
     cart.cart_items.each do |cart_item|
       order_items.build(item: cart_item.item, quantity: cart_item.quantity)
@@ -45,7 +47,7 @@ class Order < ApplicationRecord
   end
 
   def postage
-    ((amount / 5) + 1) * 600
+    ((amount / 5) + 1) * POSTAGE_FEE
   end
 
   def total
