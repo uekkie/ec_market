@@ -2,6 +2,10 @@ if User.count == 0
   User.create(email: 'yamada@example.com', password: 'aaaaaa', password_confirmation: 'aaaaaa')
 end
 
+if User.where(admin: true).count == 0
+  User.create(email: 'admin@example.com', password: 'aaaaaa', password_confirmation: 'aaaaaa', admin: true)
+end
+
 if Item.count == 0
   Item.create(name: "りんご", price: 200, description: "おいしいりんご", position: 1)
   Item.create(name: "みかん", price: 400, description: "おいしいみかん", position: 2)
