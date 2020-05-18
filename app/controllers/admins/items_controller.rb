@@ -1,5 +1,4 @@
-class Admins::ItemsController < ApplicationController
-  before_action :admin_signed_in?
+class Admins::ItemsController < Admins::ApplicationController
   before_action :set_item, only: %i[show edit update destroy up_position down_position]
 
   def index
@@ -7,11 +6,10 @@ class Admins::ItemsController < ApplicationController
   end
 
   def show
-
   end
 
   def new
-    @item = current_shop.items.new
+    @item = current_shop.items.build
   end
 
   def edit
@@ -41,12 +39,12 @@ class Admins::ItemsController < ApplicationController
   end
 
   def up_position
-    item.decrement_position
+    @item.decrement_position
     redirect_to admins_items_url
   end
 
   def down_position
-    item.increment_position
+    @item.increment_position
     redirect_to admins_items_url
   end
 
