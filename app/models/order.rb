@@ -29,7 +29,7 @@ class Order < ApplicationRecord
   end
 
   def tax_fee
-    (total * 8 / 100)
+    (BigDecimal(total.to_s) * BigDecimal("0.08")).ceil
   end
 
   def delivery_fee
