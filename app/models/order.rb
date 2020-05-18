@@ -8,7 +8,7 @@ class Order < ApplicationRecord
 
   has_many :order_items
 
-  POSTAGE_FEE = 600
+  scope :recent, -> { order(created_at: :desc) }
 
   def build_order_items(cart)
     cart.cart_items.each do |cart_item|
@@ -17,7 +17,7 @@ class Order < ApplicationRecord
   end
 
   def self.business_days
-    (3..14).map { |i| [i.business_day.from_now, I18n.l(i.business_day.from_now, format: :short_jp)] }
+    (3..14).map { |i| [i.business_day.from_now, I18n.l(i.business_day.from_now, format: :short)] }
   end
 
   def subtotal
@@ -29,7 +29,7 @@ class Order < ApplicationRecord
   end
 
   def tax_fee
-    (BigDecimal(total.to_s) * BigDecimal("0.08")).ceil
+    (total * 8 / 100)
   end
 
   def delivery_fee
@@ -47,7 +47,7 @@ class Order < ApplicationRecord
   end
 
   def postage
-    ((amount / 5) + 1) * POSTAGE_FEE
+    ((amount / 5) + 1) * 600
   end
 
   def total
@@ -55,7 +55,7 @@ class Order < ApplicationRecord
   end
 
   def total_with_tax
-    (total + tax_fee).round(-1)
+    (total + (total * 8 / 100)).round(-1)
   end
 
 end
