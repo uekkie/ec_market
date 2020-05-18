@@ -7,6 +7,13 @@ ja:
       order: 注文
       order_item: 注文の商品
     attributes:
+      item:
+        name: 商品名
+        price: 価格
+        description: 商品の説明
+        image: 商品画像
+        position: 商品の表示順序
+        hidden: 非表示フラグ
       cart_item:
         quantity: 数量
       order:
