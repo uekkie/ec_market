@@ -8,6 +8,8 @@ class Order < ApplicationRecord
 
   has_many :order_items
 
+  scope :recent, -> { order(created_at: :desc) }
+
   def build_order_items(cart)
     cart.cart_items.each do |cart_item|
       order_items.build(item: cart_item.item, quantity: cart_item.quantity)
@@ -15,7 +17,7 @@ class Order < ApplicationRecord
   end
 
   def self.business_days
-    (3..14).map { |i| [i.business_day.from_now, I18n.l(i.business_day.from_now, format: :short_jp)] }
+    (3..14).map { |i| [i.business_day.from_now, I18n.l(i.business_day.from_now, format: :short)] }
   end
 
   def subtotal
