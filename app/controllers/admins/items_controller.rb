@@ -2,21 +2,21 @@ class Admins::ItemsController < Admins::ApplicationController
   before_action :set_item, only: %i[show edit update destroy up_position down_position]
 
   def index
-    @items = current_shop.items
+    @items = Item.listed
   end
 
   def show
   end
 
   def new
-    @item = current_shop.items.build
+    @item = Item.new
   end
 
   def edit
   end
 
   def create
-    @item = current_shop.items.build(item_params)
+    @item = Item.new(item_params)
 
     if @item.save
       redirect_to admins_items_url, notice: '商品を登録しました'

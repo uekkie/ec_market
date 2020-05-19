@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
     if admin_signed_in?
       redirect_to admins_items_url
     end
-    @items = current_shop.items.displayed
+    @items = Item.displayed
   end
 
   def show

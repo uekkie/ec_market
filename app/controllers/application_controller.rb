@@ -16,12 +16,6 @@ class ApplicationController < ActionController::Base
     current_user.admin
   end
 
-  def current_shop
-    Shop.find(1)
-  rescue ActiveRecord::RecordNotFound
-    Shop.create
-  end
-
   helper_method :current_cart
   helper_method :admin_signed_in?
 
