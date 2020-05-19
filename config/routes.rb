@@ -20,5 +20,7 @@ Rails.application.routes.draw do
 
   resources :orders, only: %i[index show new create]
 
-  resources :posts
+  resources :posts do
+    resources :comments
+  end
 end
