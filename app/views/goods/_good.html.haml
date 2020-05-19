@@ -1,0 +1,9 @@
+- if user_signed_in? && current_user != post.user
+  - if good = post.good_user(current_user.id)
+    = button_to user_post_good_path(post.user, post, good), class: "btn btn-danger", method: :delete, id: "good-button", remote: true do
+      Good解除
+      %span.badge.badge-light #{post.goods_count}
+  - else
+    = button_to user_post_goods_path(post.user, post), class: "btn btn-success", id: "good-button", remote: true do
+      Good!
+      %span.badge.badge-light #{post.goods_count}

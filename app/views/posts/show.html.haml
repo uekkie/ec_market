@@ -8,6 +8,10 @@
 
 - if user_signed_in?
   = render "posts/actions", post: @post
+
+  #good-buttons-form
+    = render "goods/good", post: @post
+
   = render "comments/form"
 
 %h4.mt-3 コメントの一覧
