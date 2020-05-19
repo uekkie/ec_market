@@ -1,0 +1,9 @@
+%h1= @post.title
+
+= @post.content
+
+.images
+  - if @post.image.present?
+    = image_tag @post.image.to_s, size: '200x200'
+
+= render "posts/actions", post: @post

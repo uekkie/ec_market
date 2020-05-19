@@ -1,0 +1,9 @@
+= simple_form_for @post do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  = f.input :title
+  = f.input :content, as: :text
+  = image_tag(@post.image.to_s)
+  = f.file_field :image
+  = f.button :submit, class: 'btn btn-primary'
