@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
     if @comment.save
       redirect_to @post, notice: 'コメントを作成しました'
     else
-      render :new
+      render "posts/show"
     end
   end
 
