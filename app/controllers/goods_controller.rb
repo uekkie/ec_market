@@ -4,6 +4,7 @@ class GoodsController < ApplicationController
 
   def create
     @good = current_user.goods.create!(user_id: current_user.id, post_id: @post.id)
+    GoodMailer.with(good: @good).get_good.deliver_later
     @post.reload
   end
 
