@@ -29,4 +29,8 @@ Rails.application.routes.draw do
     end
   end
 
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: '/lo'
+  end
 end

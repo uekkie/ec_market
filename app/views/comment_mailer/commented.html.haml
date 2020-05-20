@@ -1,0 +1,6 @@
+%h1= "#{@post.title}にコメントが付きました"
+%p 投稿者:#{@comment.user.name}
+
+%p= @comment.body
+
+%p= link_to '日記を確認する', user_post_url(@post.user, @post)

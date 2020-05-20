@@ -33,6 +33,7 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -43,6 +44,8 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'spring-commands-rspec'
+  gem "letter_opener"
+  gem 'letter_opener_web'
 end
 
 group :test do
