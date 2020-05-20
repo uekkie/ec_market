@@ -9,6 +9,7 @@
 - if user_signed_in?
   = render "posts/actions", post: @post
 
+- if user_signed_in? && !@post.author?(current_user)
   #good-buttons-form
     = render "goods/good", post: @post
 

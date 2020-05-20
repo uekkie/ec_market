@@ -6,6 +6,10 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :goods, dependent: :destroy
 
+  def author?(user)
+    self.user.id == user.id
+  end
+
   def good_user(user_id)
     goods.find_by(user_id: user_id)
   end
