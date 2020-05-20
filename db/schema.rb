@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 2020_05_20_134455) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "admin", default: false, null: false
     t.string "nick_name", default: "", null: false
-    t.string "avatar_url"
+    t.string "avatar"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
