@@ -9,4 +9,10 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :goods, dependent: :destroy
 
+  def charge_coupon(coupon)
+    raise '使用済みのコードです' if self.used
+    self.point += coupon.point
+    self.used  = true
+    save
+  end
 end

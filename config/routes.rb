@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         post :down_position
       end
     end
+    resources :coupons
   end
 
   resource :cart, only: [:show]
@@ -30,6 +31,10 @@ Rails.application.routes.draw do
       resources :comments
       resources :goods, only: %i[create destroy]
     end
+  end
+
+  namespace :users do
+    resources :coupons, only: %i[index new create]
   end
 
 

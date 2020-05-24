@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_20_134455) do
+ActiveRecord::Schema.define(version: 2020_05_24_112020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 2020_05_20_134455) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "coupons", force: :cascade do |t|
+    t.integer "point", default: 0, null: false
+    t.string "code", null: false
+    t.boolean "used", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["code"], name: "index_coupons_on_code", unique: true
   end
 
   create_table "goods", force: :cascade do |t|
@@ -107,6 +116,7 @@ ActiveRecord::Schema.define(version: 2020_05_20_134455) do
     t.boolean "admin", default: false, null: false
     t.string "nick_name", default: "", null: false
     t.string "avatar"
+    t.integer "point", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
