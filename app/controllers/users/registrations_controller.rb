@@ -3,7 +3,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_account_update_params, only: %i[update]
 
   prepend_before_action :require_no_authentication, only: %i[cancel]
-  prepend_before_action :authenticate_scope!, only: %i[new create edit update destroy]
 
   protected
 
