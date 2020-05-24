@@ -10,14 +10,14 @@ class Users::CouponsController < ApplicationController
   def create
     if @coupon = Coupon.find_by(code: params[:coupon][:code])
       if @coupon.used
-        @coupon.errors[:code] = 'すでに使用されています'
+        @coupon.errors.add(:code, 'コードはすでに使用されています')
         render :new
       end
       current_user.charge_coupon(@coupon)
       redirect_to profile_users_url, notice: "#{@coupon.point}ポイントチャージされました"
     else
-      msg = @coupon.nil? ? '無効です' : 'すでに使用されています'
-      # redirect_to profile_users_url, alert: 'クーポンコードは#{msg}'
+      @coupon = Coupon.new
+      @coupon.errors.add(:code, 'コードが無効です')
       render :new
     end
   end

@@ -1,5 +1,5 @@
 class Coupon < ApplicationRecord
-  after_initialize :generate_code
+  before_validation :generate_code
 
   scope :recent, -> { order(created_at: :desc) }
 
