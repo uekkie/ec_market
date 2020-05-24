@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :coupons, only: %i[index new create]
+    resources :points, only: %i[edit update]
   end
 
 

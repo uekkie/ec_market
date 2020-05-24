@@ -17,6 +17,26 @@ RSpec.describe "Users", type: :system do
   end
 
 
+  context "管理者でログインしているとき" do
+    let!(:admin) { create(:admin) }
+    let!(:user) { create(:user) }
+
+    it 'ユーザーのポイントを増減できる', js: true do
+      sign_in admin
+
+      visit edit_users_point_path(user)
+      # visit user_path(user)
+      # click_on 'ポイントの編集'
+
+
+      fill_in '変更後のポイント', with: '500'
+      expect {
+        click_on 'ポイントを更新'
+        user.reload
+      }.to change { user.point }.by(500)
+    end
+  end
+
   context "ログインしているとき" do
 
     before { sign_in user }
