@@ -11,8 +11,8 @@
   %tbody
     - @coupons.each do |coupon|
       %tr
-        %td = coupon.display_code
-        %td = coupon.point
-        %td = coupon.display_used
+        %td= link_to coupon.display_code, admins_coupon_path(coupon)
+        %td= coupon.point
+        %td= coupon.display_used
         %td
           =link_to '削除', admins_coupon_path(coupon), method: :delete, data: {confirm: '削除しますか？'}
