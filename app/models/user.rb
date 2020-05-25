@@ -9,6 +9,13 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :goods, dependent: :destroy
 
+  scope :normal, -> { where(admin: false) }
+  scope :recent, -> { order(created_at: :desc) }
+
+  def display_name
+    name.present? ? name : email
+  end
+
   def charge_coupon(coupon)
     raise '使用済みのコードです' if self.used
     self.point += coupon.point

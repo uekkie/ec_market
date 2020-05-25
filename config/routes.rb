@@ -25,6 +25,12 @@ Rails.application.routes.draw do
 
   resources :posts, only: :index
 
+
+  namespace :users do
+    resources :coupons, only: %i[index new create]
+    resources :points, only: %i[index edit update]
+  end
+
   resources :users do
     get :profile, action: :profile, on: :collection
     resources :posts do
@@ -32,12 +38,6 @@ Rails.application.routes.draw do
       resources :goods, only: %i[create destroy]
     end
   end
-
-  namespace :users do
-    resources :coupons, only: %i[index new create]
-    resources :points, only: %i[edit update]
-  end
-
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: '/lo'

@@ -21,13 +21,10 @@ RSpec.describe "Users", type: :system do
     let!(:admin) { create(:admin) }
     let!(:user) { create(:user) }
 
-    it 'ユーザーのポイントを増減できる', js: true do
+    it 'ユーザーのポイントを増減できる' do
       sign_in admin
 
       visit edit_users_point_path(user)
-      # visit user_path(user)
-      # click_on 'ポイントの編集'
-
 
       fill_in '変更後のポイント', with: '500'
       expect {
