@@ -12,7 +12,7 @@ RSpec.describe "Coupons", type: :system do
 
     fill_in 'ポイント', with: '500'
     expect {
-      click_on '発行する'
+      click_on '登録する'
       expect(page).to have_content 'クーポンコードを発行しました'
     }.to change { Coupon.count }.by(1)
 
@@ -39,6 +39,32 @@ RSpec.describe "Coupons", type: :system do
       }.to change { user.point }.by(500)
 
     end
+
+
   end
 
+  context '管理者でログインしているとき' do
+    let!(:admin){ create(:admin) }
+    let!(:user){ create(:user) }
+    let!(:coupon){ create(:coupon, point: 999) }
+    before { sign_in admin }
+    it 'クーポンの利用状況が確認できる' do
+      visit admins_coupons_path
+
+      within first('tbody > tr') do
+        expect(page).to have_content 999
+        expect(page).to have_content '未使用'
+      end
+
+      user.charge_coupon(coupon)
+
+      visit admins_coupons_path
+
+      within first('tbody > tr') do
+        expect(page).to have_content 999
+        expect(page).to have_content '使用済み'
+        expect(page).to have_content user.display_name
+      end
+    end
+  end
 end

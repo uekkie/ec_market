@@ -1,5 +1,6 @@
 class Coupon < ApplicationRecord
   before_validation :generate_code
+  belongs_to :user, optional: true
 
   scope :recent, -> { order(created_at: :desc) }
 
@@ -12,7 +13,11 @@ class Coupon < ApplicationRecord
   end
 
   def display_used
-    self.used ? '使用済み' : '未使用'
+    self.used? ? '使用済み' : '未使用'
+  end
+
+  def used?
+    self.user.present?
   end
 
   private

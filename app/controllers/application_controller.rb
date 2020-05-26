@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     if admin_signed_in?
       admins_items_path
     else
-      items_path
+      root_path
     end
   end
 

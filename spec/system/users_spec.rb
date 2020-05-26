@@ -55,7 +55,7 @@ RSpec.describe "Users", type: :system do
       visit admins_coupons_path
       expect {
         first('tbody tr').click_link '削除'
-        expect(page.driver.browser.switch_to.alert.text).to eq '削除してよろしいですか？'
+        expect(page.driver.browser.switch_to.alert.text).to eq '削除しますか？'
         page.accept_confirm
         expect(current_path).to eq admins_coupons_path
       }.to change { Coupon.count }.by(-1)
