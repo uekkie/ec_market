@@ -19,7 +19,7 @@ class User < ApplicationRecord
   end
 
   def charge_coupon(coupon)
-    raise '使用済みのコードです' if coupon.used?
+    return '使用済みのコードです' if coupon.used?
     ActiveRecord::Base.transaction do
       self.point += coupon.point
       save!
