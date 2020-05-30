@@ -18,6 +18,6 @@
     label_method: :second,
     value_method: :first
 
-  = f.input :user_point, label: 'ポイントを利用する', html5: true, input_html: { min: 0, max: 10}
+  = f.input :user_point, label: 'ポイントを利用する', readonly: @order.user.point == 0,  input_html: { min: 0, max: @order.user.point}
   = "つかえるポイント: #{@order.user.point}"
   = f.button :submit, '購入を確定する', class: 'btn btn-primary'
