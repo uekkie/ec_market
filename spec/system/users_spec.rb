@@ -117,7 +117,7 @@ RSpec.describe "Users", type: :system do
 
       fill_in '送り先', with: user.address
       select '8時〜12時', from: '配送時間帯'
-      fill_in 'ポイントを利用する', with: 1000
+      fill_in 'ポイントを利用する', with: 100
 
       expect(user.point).to eq 100
 
