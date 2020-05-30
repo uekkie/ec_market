@@ -21,9 +21,9 @@ RSpec.describe "Coupons", type: :system do
   context 'ユーザーでログインしているとき' do
     let!(:user) { create(:user) }
     let!(:coupon) { create(:coupon) }
+    before { sign_in user }
 
     it 'クーポンコードを入力してポイントを受け取れる' do
-      sign_in user
 
       visit profile_users_path
 
@@ -40,6 +40,21 @@ RSpec.describe "Coupons", type: :system do
 
     end
 
+    it 'ポイント履歴を確認できる' do
+
+      user.charge_coupon(coupon)
+      coupon_100 = create(:coupon, point: 100, user: user)
+
+      visit profile_users_path
+      within '#coupon-histories' do
+        expect(first('tbody tr')).to have_content coupon.display_code
+        expect(first('tbody tr')).to have_content I18n.l(coupon.updated_at, formats: :short)
+
+        expect(all('tbody tr')[1]).to have_content coupon_100.display_code
+        expect(all('tbody tr')[1]).to have_content I18n.l(coupon_100.updated_at, formats: :short)
+
+      end
+    end
 
   end
 

@@ -14,3 +14,18 @@
 .coupons_form
   = "ポイント数: #{@user.point}"
   =link_to 'クーポンコードを入力', new_users_coupon_path
+
+
+%h3 クーポン履歴
+#coupon-histories
+  %table.table.table-striped
+    %thead
+      %th ポイント
+      %th コード
+      %th 獲得日
+    %tbody
+      - @user.coupons.each do |coupon|
+        %tr
+          %td= coupon.point
+          %td= coupon.display_code
+          %td= l(coupon.updated_at, formats: :short)
