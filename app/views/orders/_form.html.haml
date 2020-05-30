@@ -2,7 +2,9 @@
 
 %h4 配送先の情報
 
-= simple_form_for @order do |f|
+= simple_form_for @order, html: { class: 'form-horizontal' }  do |f|
+
+
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
@@ -15,4 +17,7 @@
     selected: Order.business_days.first.second,
     label_method: :second,
     value_method: :first
+
+  = f.input :user_point, label: 'ポイントを利用する', html5: true, input_html: { min: 0, max: 10}
+  = "つかえるポイント: #{@order.user.point}"
   = f.button :submit, '購入を確定する', class: 'btn btn-primary'
