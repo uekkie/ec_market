@@ -6,4 +6,6 @@ class Merchant < ApplicationRecord
 
 
   scope :recent, -> { order(created_at: :desc) }
+
+  has_many :items, dependent: :destroy
 end
