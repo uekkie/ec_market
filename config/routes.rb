@@ -50,6 +50,11 @@ Rails.application.routes.draw do
     resources :merchants
   end
 
+  namespace :merchants do
+    resources :items
+  end
+  resources :merchants, only: [:show]
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: '/lo'
   end
