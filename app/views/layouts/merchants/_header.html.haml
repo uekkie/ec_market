@@ -1,0 +1,5 @@
+%nav.navbar.navbar-light.bg-light
+  = link_to 'いよやマーケット', root_path, class: 'nav-item active'
+  = link_to '商品の管理', merchants_items_path, class: 'nav-item active'
+  = link_to 'ログアウト', destroy_merchant_session_path, method: :delete, class: 'nav-item nav-link'
+  = link_to current_merchant.name, merchant_path(current_merchant), class: 'nav-item nav-link'
