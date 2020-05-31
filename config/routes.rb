@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
+
   devise_for :users, controllers: {
-      registrations: 'users/registrations'
+      registrations: 'users/registrations',
+
+  }
+
+  devise_for :merchants, controllers: {
+      registrations: 'merchants/registrations',
+      sessions:      'merchants/sessions',
   }
 
   root to: "posts#index"
@@ -37,6 +44,10 @@ Rails.application.routes.draw do
       resources :comments
       resources :goods, only: %i[create destroy]
     end
+  end
+
+  namespace :admins do
+    resources :merchants
   end
 
   if Rails.env.development?

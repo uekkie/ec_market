@@ -132,3 +132,53 @@ RSpec.describe "Users", type: :system do
     end
   end
 end
+
+
+RSpec.describe "Admins", type: :system do
+  let!(:admin) { create(:admin) }
+  before { sign_in admin }
+
+  it '業者アカウントの追加・更新' do
+    visit profile_users_path
+
+    click_on '業者アカウントの管理'
+
+    click_on '新規追加'
+
+    fill_in '業者名', with: 'まるお青果店'
+    fill_in 'メールアドレス', with: 'maruo@example.com'
+    fill_in 'パスワード', with: 'aaaaaa', match: :first
+    fill_in 'パスワード確認', with: 'aaaaaa'
+
+    expect {
+      click_on '登録する'
+    }.to change { Merchant.count }.by(1)
+
+    expect(current_path).to eq admins_merchants_path
+
+    first('tbody tr').click_link '編集'
+
+    fill_in '業者名', with: 'マルオフルーツ'
+
+    fill_in '現在のパスワード', with: 'aaaaaa'
+
+    click_on '更新する'
+
+    expect(current_path).to eq admins_merchants_path
+    expect(first('tbody tr')).to have_content 'マルオフルーツ'
+
+  end
+
+  it '業者を削除できる', js: true do
+    merchant = create(:merchant)
+
+    visit admins_merchants_path
+
+    expect {
+      first('tbody tr').click_link '削除'
+      expect(page.driver.browser.switch_to.alert.text).to eq '削除してよろしいですか？'
+      page.accept_confirm
+      expect(current_path).to eq admins_merchants_path
+    }.to change { Merchant.count }.by(-1)
+  end
+end

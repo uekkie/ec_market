@@ -9,6 +9,7 @@ ja:
   activerecord:
     model:
       user: ユーザー
+      merchant: 業者
       cart: カート
       cart_item: カートの商品
       order: 注文
@@ -40,5 +41,11 @@ ja:
         code: クーポンコード
         point: ポイント
         used: 使用済み
+      merchant:
+        name: 業者名
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード確認
+        current_password: 現在のパスワード
 
 
