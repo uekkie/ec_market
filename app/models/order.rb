@@ -11,9 +11,16 @@ class Order < ApplicationRecord
   end
 
   belongs_to :user
+  belongs_to :merchant
+  has_many :order_items
+
   validates :address, :ship_time, :ship_date, presence: true
 
-  has_many :order_items
+  # 注文済み
+  # 発送処理中
+  # 処理中発送済み
+  # キャンセル
+  enum status: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }
 
   scope :recent, -> { order(created_at: :desc) }
 
@@ -67,4 +74,15 @@ class Order < ApplicationRecord
     (total + tax_fee).round(-1)
   end
 
+  def prepare_shipping
+    self.prepare_shipping!
+  end
+
+  def shipped
+    self.shipped!
+  end
+
+  def cancel
+    self.canceled!
+  end
 end
