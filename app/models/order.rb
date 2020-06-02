@@ -29,6 +29,9 @@ class Order < ApplicationRecord
   def build_order_items(cart)
     cart.cart_items.each do |cart_item|
       order_items.build(item: cart_item.item, quantity: cart_item.quantity)
+      if self.merchant.nil?
+        self.merchant = cart_item.item.merchant
+      end
     end
   end
 

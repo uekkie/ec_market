@@ -90,7 +90,8 @@ RSpec.describe "Users", type: :system do
 
   context 'カートに商品が入っているとき' do
     before { sign_in user }
-    let!(:item) { create(:item, name: "りんご", price: 300) }
+    let!(:merchant) { create(:merchant) }
+    let!(:item) { create(:item, name: "りんご", price: 300, merchant: merchant) }
 
     it '商品を購入できる' do
       visit item_path(item)
