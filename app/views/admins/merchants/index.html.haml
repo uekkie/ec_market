@@ -12,5 +12,5 @@
         %td= merchant.email
         %td
           = link_to '編集', edit_admins_merchant_path(merchant)
-          |
- = link_to '削除', admins_merchant_path(merchant), method: :delete, data: { confirm: '削除してよろしいですか？' }
+          %br
+          = link_to '削除', admins_merchant_path(merchant), method: :delete, data: { confirm: '削除してよろしいですか？' }
