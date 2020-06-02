@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   namespace :users do
     resources :coupons
     resources :points, only: %i[index edit update]
+    resources :order_statuses, only: :update
   end
 
   resources :users do

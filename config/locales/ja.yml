@@ -1,4 +1,11 @@
 ja:
+  enums:
+    order:
+      status:
+        ordered: '注文済み'
+        prepare_shipping: '発送準備中'
+        shipped: '発送済み'
+        canceled: 'キャンセル'
   time:
     formats:
       short: "%Y年%m月%d日"
@@ -31,6 +38,7 @@ ja:
         ship_time: 配送時間帯
         ship_date: 配達日
         user_point: ポイント
+        satus: 注文の状態
       post:
         title: タイトル
         content: 本文

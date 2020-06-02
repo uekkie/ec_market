@@ -5,6 +5,5 @@ FactoryBot.define do
     ship_time { '14時〜16時' }
     ship_date { 3.days.ago }
     total_price { 1000 }
-      # order_items { create(:order_item) }
   end
 end

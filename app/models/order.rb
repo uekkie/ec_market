@@ -74,15 +74,4 @@ class Order < ApplicationRecord
     (total + tax_fee).round(-1)
   end
 
-  def prepare_shipping
-    self.prepare_shipping!
-  end
-
-  def shipped
-    self.shipped!
-  end
-
-  def cancel
-    self.canceled!
-  end
 end

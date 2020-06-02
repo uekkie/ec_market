@@ -12,16 +12,16 @@ class Merchant < ApplicationRecord
 
   def prepare_shipping(order)
     raise unless self == order.merchant
-    order.prepare_shipping
+    order.prepare_shipping!
   end
 
   def shipped(order)
     raise unless self == order.merchant
-    order.shipped
+    order.shipped!
   end
 
   def cancel(order)
     raise unless self == order.merchant
-    order.cancel
+    order.canceled!
   end
 end
