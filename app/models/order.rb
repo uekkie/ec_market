@@ -1,13 +1,10 @@
 class Order < ApplicationRecord
   before_validation do
-    self.total_price = total_with_tax - user_point
-  end
-
-  before_save do
     if self.user_point > self.user.point
       self.errors.add(:user_point, '上限を超えています')
-      throw(:abort)
     end
+
+    self.total_price = total_with_tax - user_point
   end
 
   belongs_to :user
