@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :order_item do
-    item { create(:item) }
+    item
+    order
     quantity { 2 }
   end
 end

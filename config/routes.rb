@@ -53,6 +53,8 @@ Rails.application.routes.draw do
 
   namespace :merchants do
     resources :items
+    resources :orders, only: :index
+    resources :order_statuses, only: :update
   end
   resources :merchants, only: [:show]
 

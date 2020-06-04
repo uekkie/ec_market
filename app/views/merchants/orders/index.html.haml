@@ -1,0 +1,25 @@
+%h1 注文済みの一覧
+
+
+%table.table.table-striped
+  %thead
+    %th ユーザー
+    %th 配送先
+    %th 注文日
+    %th 注文の状態
+    %th
+  %tbody
+    - @orders.includes(:order_items, :user).each do |order|
+      %tr
+        %td= order.user.name
+        %td= order.address
+        %td= l(order.created_at, formats: :short)
+        %td= order.status_i18n
+        %td
+          - if order.ordered?
+            = link_to '発送処理中に変更',merchants_order_status_path(order, order: { status: :prepare_shipping }), method: :put
+            %br
+            = link_to 'キャンセルする',merchants_order_status_path(order, order: { status: :prepare_shipping }), method: :put, data: {confirm: 'キャンセルしてよろしいですか？'}
+          - elsif order.prepare_shipping?
+            = link_to '発送中に変更',merchants_order_status_path(order, order: { status: :shipped }), method: :put
+
