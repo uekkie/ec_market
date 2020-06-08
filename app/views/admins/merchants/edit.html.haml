@@ -1,0 +1,17 @@
+%h2 #{t('activerecord.model.merchant')}の編集
+
+= simple_form_for(@merchant, url: registration_path(@merchant), html: { method: :put }) do |f|
+  = render "devise/shared/error_messages", resource: @merchant
+  .form-inputs
+    = f.input :name, autofocus: true, autocomplete: "name"
+  .form-inputs
+    = f.input :email, as: :email, autocomplete: "email"
+  .form-inputs
+    = f.input :password, as: :password, autocomplete: "new-password", hint: "(変更しない場合は空白のままにします)"
+  .form-inputs
+    = f.input :password_confirmation, as: :password, autocomplete: "new-password"
+  .form-inputs
+    = f.input :current_password, as: :password, autocomplete: "current-password"
+  .form-actions
+    = f.submit "更新する", class: 'btn btn-primary'
+
