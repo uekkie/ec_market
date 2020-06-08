@@ -1,0 +1,12 @@
+%h3 ユーザー情報
+= link_to '編集', edit_registration_path(@user)
+#avatar_name
+  %span
+    = link_to @user.avatar_url, target: :_blank do
+      = image_tag @user.avatar_url(:thumbnail), class: 'rounded img-thumbnail' if @user.avatar.present?
+  .form-inputs
+    = @user.name
+  .form-inputs
+    = @user.nick_name
+  .form-inputs
+    = @user.email

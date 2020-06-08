@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+      registrations: 'users/registrations'
+  }
 
   root to: "posts#index"
   resources :items, only: %i[index show]
@@ -23,6 +25,7 @@ Rails.application.routes.draw do
   resources :posts, only: :index
 
   resources :users do
+    get :profile, action: :profile, on: :collection
     resources :posts do
       resources :comments
       resources :goods, only: %i[create destroy]
