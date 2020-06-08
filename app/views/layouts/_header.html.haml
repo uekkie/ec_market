@@ -10,5 +10,6 @@
     - if admin_signed_in?
       = link_to '商品の管理', admins_items_path, class: 'nav-item active'
     = link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-item nav-link'
+    .sm= current_user.email
   - else
     = link_to 'ログイン', new_user_session_path, class: 'nav-item nav-link'

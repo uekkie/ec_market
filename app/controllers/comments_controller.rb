@@ -9,6 +9,9 @@ class CommentsController < ApplicationController
     end
 
     if @comment.save
+      unless @post.author?(@comment.user)
+        CommentMailer.with(comment: @comment).commented.deliver_later
+      end
       redirect_to user_post_url(@post.user, @post), notice: 'コメントを作成しました'
     else
       render "posts/show"
