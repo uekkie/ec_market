@@ -90,7 +90,8 @@ RSpec.describe "Users", type: :system do
 
   context 'カートに商品が入っているとき' do
     before { sign_in user }
-    let!(:item) { create(:item, name: "りんご", price: 300) }
+    let!(:merchant) { create(:merchant) }
+    let!(:item) { create(:item, name: "りんご", price: 300, merchant: merchant) }
 
     it '商品を購入できる' do
       visit item_path(item)
@@ -131,6 +132,46 @@ RSpec.describe "Users", type: :system do
       expect(order.total_price).to eq order.total_with_tax - order.user_point
     end
   end
+
+
+  context '商品注文後' do
+    before { sign_in user }
+    let!(:merchant) { create(:merchant) }
+    let!(:order) {
+      create(:order, user: user, merchant: merchant) do |order|
+        order.order_items.create(item: create(:item, merchant: merchant), quantity: 2)
+      end
+    }
+
+    it 'ステータスが「注文済み」であればキャンセルできる', js: true do
+      visit orders_path
+
+      expect(first('.order_status')).to have_content '注文済み'
+
+      expect {
+        click_on '注文のキャンセル'
+        expect(page.driver.browser.switch_to.alert.text).to eq 'キャンセルしてよろしいですか？'
+        page.accept_confirm
+        expect(current_path).to eq orders_path
+      }.to change { Order.where(status: :canceled).count }.by(1)
+      expect(page).to have_content 'キャンセルしました'
+    end
+
+    it 'ステータスが「発送準備中」であればキャンセルできない' do
+      order.prepare_shipping!
+      visit orders_path
+      expect(page).to have_content '発送準備中'
+      expect(page).to have_no_content '注文のキャンセル'
+    end
+
+    it 'ステータスが「発送中」であればキャンセルできない' do
+      order.shipped!
+      visit orders_path
+      expect(page).to have_content '発送済み'
+      expect(page).to have_no_content '注文のキャンセル'
+    end
+  end
+
 end
 
 

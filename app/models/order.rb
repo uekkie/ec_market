@@ -1,19 +1,23 @@
 class Order < ApplicationRecord
   before_validation do
+    if self.user_point > self.user.point
+      self.errors.add(:user_point, '上限を超えています')
+    end
+
     self.total_price = total_with_tax - user_point
   end
 
-  before_save do
-    if self.user_point > self.user.point
-      self.errors.add(:user_point, '上限を超えています')
-      throw(:abort)
-    end
-  end
-
   belongs_to :user
+  belongs_to :merchant
+  has_many :order_items
+
   validates :address, :ship_time, :ship_date, presence: true
 
-  has_many :order_items
+  # 注文済み
+  # 発送処理中
+  # 処理中発送済み
+  # キャンセル
+  enum status: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }
 
   scope :recent, -> { order(created_at: :desc) }
 
@@ -22,6 +26,9 @@ class Order < ApplicationRecord
   def build_order_items(cart)
     cart.cart_items.each do |cart_item|
       order_items.build(item: cart_item.item, quantity: cart_item.quantity)
+      if self.merchant.nil?
+        self.merchant = cart_item.item.merchant
+      end
     end
   end
 

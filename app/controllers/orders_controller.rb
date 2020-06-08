@@ -31,6 +31,7 @@ class OrdersController < ApplicationController
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'
     else
+      # debugger
       render :new
     end
   end
