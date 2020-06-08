@@ -1,0 +1,6 @@
+= simple_form_for [:users, @coupon] do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  = f.input :code, label: '12桁のコードを入力'
+  = f.button :submit, 'ポイントを受け取る', class: 'btn btn-primary'

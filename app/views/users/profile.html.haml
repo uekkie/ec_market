@@ -10,3 +10,7 @@
     = @user.nick_name
   .form-inputs
     = @user.email
+
+.coupons_form
+  = "ポイント数: #{@user.point}"
+  =link_to 'クーポンコードを入力', new_users_coupon_path

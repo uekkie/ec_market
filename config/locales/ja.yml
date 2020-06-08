@@ -35,5 +35,9 @@ ja:
         image: 画像
       comment:
         body: 本文
+      coupon:
+        code: クーポンコード
+        point: ポイント
+        used: 使用済み
 
 
