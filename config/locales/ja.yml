@@ -13,6 +13,7 @@ ja:
       cart_item: カートの商品
       order: 注文
       order_item: 注文の商品
+      post: 日記
     attributes:
       item:
         name: 商品名
@@ -27,5 +28,9 @@ ja:
         address: 送り先
         ship_time: 配送時間帯
         ship_date: 配達日
+      post:
+        title: タイトル
+        content: 本文
+        image: 画像
 
 

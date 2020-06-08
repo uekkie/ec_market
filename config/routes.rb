@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  root to: "items#index"
+  root to: "posts#index"
   resources :items, only: %i[index show]
 
   namespace :admins do
@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   delete '/delete_item' => 'carts#delete_item'
 
   resources :orders, only: %i[index show new create]
+
+  resources :posts
 end
