@@ -26,4 +26,9 @@ class User < ApplicationRecord
       coupon.update!(user: self)
     end
   end
+
+  def use_point(order)
+    self.point -= order.user_point
+    save!
+  end
 end

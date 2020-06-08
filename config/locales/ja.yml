@@ -29,6 +29,7 @@ ja:
         address: 送り先
         ship_time: 配送時間帯
         ship_date: 配達日
+        user_point: ポイント
       post:
         title: タイトル
         content: 本文

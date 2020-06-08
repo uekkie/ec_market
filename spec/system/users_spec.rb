@@ -73,7 +73,7 @@ RSpec.describe "Users", type: :system do
     end
   end
 
-  context "ログインしているとき" do
+  context "ユーザーでログインしているとき" do
 
     before { sign_in user }
     let!(:item) { create(:item, name: "りんご", price: 300) }
@@ -96,7 +96,7 @@ RSpec.describe "Users", type: :system do
       visit item_path(item)
       click_on 'カートに追加'
 
-      visit new_order_path #
+      visit new_order_path
 
       fill_in '送り先', with: user.address
       select '8時〜12時', from: '配送時間帯'
@@ -104,6 +104,31 @@ RSpec.describe "Users", type: :system do
       expect {
         click_on '購入を確定する'
       }.to change { Order.count }.by(1)
+    end
+
+    it '注文時にポイントが利用できる' do
+      coupon_100 = create(:coupon, point: 100)
+      user.charge_coupon(coupon_100)
+
+      visit item_path(item)
+      click_on 'カートに追加'
+
+      visit new_order_path
+
+      fill_in '送り先', with: user.address
+      select '8時〜12時', from: '配送時間帯'
+      fill_in 'ポイントを利用する', with: 100
+
+      expect(user.point).to eq 100
+
+      expect {
+        click_on '購入を確定する'
+      }.to change { Order.count }.by(1)
+
+      user.reload
+      expect(user.point).to eq 0
+      order = Order.last
+      expect(order.total_price).to eq order.total_with_tax - order.user_point
     end
   end
 end
