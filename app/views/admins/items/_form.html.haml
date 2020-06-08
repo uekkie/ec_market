@@ -1,8 +1,11 @@
-= simple_form_for @item, url: admins_items_path do |f|
+= simple_form_for [:admins, @item] do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
   = f.input :name
   = f.input :price
   = f.input :description
+  = image_tag(@item.image.to_s)
+  = f.file_field :image
+  = f.input :hidden
   = f.button :submit, class: 'btn btn-primary'

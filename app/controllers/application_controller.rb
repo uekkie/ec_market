@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
     current_user.admin
   end
 
-
   helper_method :current_cart
   helper_method :admin_signed_in?
 

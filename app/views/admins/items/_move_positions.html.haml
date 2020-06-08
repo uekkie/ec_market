@@ -1,0 +1,6 @@
+%strong 一覧での表示位置 #{item.position}
+- unless item.first?
+  = link_to '上げる', up_position_admins_item_path(item.id), method: :post
+
+- unless item.last?
+  = link_to '下げる', down_position_admins_item_path(item.id), method: :post

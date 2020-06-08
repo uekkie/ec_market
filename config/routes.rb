@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
-  get 'orders/new'
-  get 'orders/create'
   devise_for :users
 
   root to: "items#index"
   resources :items, only: %i[index show]
 
   namespace :admins do
-    resources :items
+    resources :items do
+      member do
+        post :up_position
+        post :down_position
+      end
+    end
   end
 
   resource :cart, only: [:show]
@@ -15,5 +18,5 @@ Rails.application.routes.draw do
   post '/update_item' => 'carts#update_item'
   delete '/delete_item' => 'carts#delete_item'
 
-  resources :orders, only: %i[new create]
+  resources :orders, only: %i[index show new create]
 end

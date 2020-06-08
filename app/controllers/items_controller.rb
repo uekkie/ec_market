@@ -2,8 +2,10 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show]
 
   def index
-    @items = Item.all.order(:position)
-
+    if admin_signed_in?
+      redirect_to admins_items_url
+    end
+    @items = Item.displayed
   end
 
   def show

@@ -21,6 +21,11 @@ gem 'devise-i18n'
 gem 'devise-i18n-views'
 gem 'business_time'
 
+gem 'acts_as_list'
+
+gem 'carrierwave'
+gem 'cloudinary'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'better_errors'
