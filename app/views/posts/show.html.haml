@@ -6,4 +6,9 @@
   - if @post.image.present?
     = image_tag @post.image.to_s, size: '200x200'
 
-= render "posts/actions", post: @post
+- if user_signed_in?
+  = render "posts/actions", post: @post
+  = render "comments/form"
+
+%h4.mt-3 コメントの一覧
+= render "comments/comment_list", comments: @post.comments.recent

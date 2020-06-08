@@ -7,6 +7,8 @@
       .badge.badge-primary= current_cart.cart_items.count
     = link_to '注文履歴', orders_path, class: 'nav-item nav-link'
     = link_to '日記を書く', new_post_path, class: 'nav-item nav-link'
+    - if admin_signed_in?
+      = link_to '商品の管理', admins_items_path, class: 'nav-item active'
     = link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-item nav-link'
   - else
     = link_to 'ログイン', new_user_session_path, class: 'nav-item nav-link'
