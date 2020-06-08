@@ -1,0 +1,20 @@
+%h4 商品
+%table.table.table-striped
+  %thead
+    %th 商品名
+    %th 個数
+    %th 小計
+    %th
+  %tbody
+    - cart_items.each do | cart_item |
+      %tr
+        %td= cart_item.item.name
+        %td
+          - if cart_item.quantity > 1
+            =link_to '-', update_item_path(item_id: cart_item.item.id, quantity: cart_item.quantity-1), method: :post
+          = cart_item.quantity
+          =link_to '+', update_item_path(item_id: cart_item.item.id, quantity: cart_item.quantity+1), method: :post
+        %td
+          = number_to_currency(cart_item.subtotal)
+        %td
+          =link_to '削除', delete_item_path(item_id: cart_item.item.id), method: :delete, data: { confirm: '削除してよろしいですか？' }

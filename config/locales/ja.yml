@@ -1,0 +1,33 @@
+ja:
+  activerecord:
+    model:
+      user: ユーザー
+      cart: カート
+      cart_item: カートの商品
+      order: 注文
+      order_item: 注文の商品
+    attributes:
+      item:
+        name: 商品名
+        price: 価格
+        description: 商品の説明
+        image: 商品画像
+        position: 商品の表示順序
+        hidden: 非表示フラグ
+      cart_item:
+        quantity: 数量
+      order:
+        address: 送り先
+        ship_time: 配送時間帯
+        ship_date: 配達日
+
+  time:
+    formats:
+      short_jp: "%Y年%m月%d日"
+  date:
+    formats:
+      short_date: "%Y-%m-%d"
+  datetime:
+    formats:
+      short_jp: "%Y年%m月%d日"
+

@@ -1,0 +1,8 @@
+%h3 カートの中身
+
+
+- if current_cart.empty?
+  カートは空です
+- else
+  =render 'carts/item_list', cart_items: @cart_items
+  =link_to '購入に進む', new_order_path

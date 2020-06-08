@@ -1,0 +1,18 @@
+=render 'orders/item_list', order: @order
+
+%h4 配送先の情報
+
+= simple_form_for @order do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  = f.input :address
+  = f.input :ship_time, as: :select,
+    collection: ShipTime.range,
+    selected: ShipTime.range.first
+  = f.input :ship_date, as: :select,
+    collection: Order.business_days,
+    selected: Order.business_days.first.second,
+    label_method: :second,
+    value_method: :first
+  = f.button :submit, '購入を確定する', class: 'btn btn-primary'

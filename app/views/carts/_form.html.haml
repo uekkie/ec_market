@@ -1,0 +1,4 @@
+= simple_form_for(@cart_item, url: add_item_path) do|f|
+  = f.input :quantity, input_html: { value: 1 }
+  = f.input :item_id, as: :hidden, input_html: { value: @item.id }
+  = f.button :submit, 'カートに追加', class: 'btn btn-primary'
