@@ -9,7 +9,7 @@ class Users::CouponsController < ApplicationController
 
   def create
     if @coupon = Coupon.find_by(code: params[:coupon][:code])
-      if @coupon.used
+      if @coupon.used?
         @coupon.errors.add(:code, 'コードはすでに使用されています')
         render :new
       end

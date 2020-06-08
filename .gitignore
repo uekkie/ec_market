@@ -36,3 +36,4 @@ yarn-debug.log*
 .yarn-integrity
 /config/cloudinary.yml
 .env
+/spec/examples.txt

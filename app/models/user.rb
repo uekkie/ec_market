@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :goods, dependent: :destroy
 
+  has_many :coupons, dependent: :destroy
+
   scope :normal, -> { where(admin: false) }
   scope :recent, -> { order(created_at: :desc) }
 
@@ -17,9 +19,11 @@ class User < ApplicationRecord
   end
 
   def charge_coupon(coupon)
-    raise '使用済みのコードです' if self.used
-    self.point += coupon.point
-    self.used  = true
-    save
+    return '使用済みのコードです' if coupon.used?
+    ActiveRecord::Base.transaction do
+      self.point += coupon.point
+      save!
+      coupon.update!(user: self)
+    end
   end
 end
