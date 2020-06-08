@@ -17,7 +17,7 @@
         %td= order.status_i18n
         %td
           - if order.ordered?
-            = link_to '発送処理中に変更',merchants_order_status_path(order, order: { status: :prepare_shipping }), method: :put
+            = link_to '発送準備中に変更',merchants_order_status_path(order, order: { status: :prepare_shipping }), method: :put
             %br
             = link_to 'キャンセルする',merchants_order_status_path(order, order: { status: :prepare_shipping }), method: :put, data: {confirm: 'キャンセルしてよろしいですか？'}
           - elsif order.prepare_shipping?

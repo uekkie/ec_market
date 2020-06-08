@@ -72,10 +72,10 @@ RSpec.describe "Merchant", type: :system do
     it '注文済みを発送処理中に変更できる' do
       visit merchants_orders_path
 
-      first('tbody tr').click_link '発送処理中に変更'
+      first('tbody tr').click_link '発送準備中に変更'
 
       within 'tbody' do
-        expect(page).to have_content '発送処理中'
+        expect(page).to have_content '発送準備中'
       end
     end
 
