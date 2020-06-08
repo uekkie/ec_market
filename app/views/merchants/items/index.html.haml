@@ -1,0 +1,15 @@
+%h1 商品管理
+
+= link_to '商品の追加', new_merchants_item_path, class: 'btn btn-primary'
+
+- @items.each do |item|
+  .item.card.mt-2.mb-2{style:"width: 20rem;"}
+    .card-header.alert{ class: item.hidden ? "alert-danger" : "alert-success"}
+      = item.hidden ? "非表示" : "表示"
+
+    = render 'items/item_image', item: item
+    .card-body
+      %h5.card-title= item.name
+      %p.card-text= item.description
+      =link_to '編集', edit_merchants_item_path(item)
+      =link_to '削除', merchants_item_path(item), method: :delete, data: {confirm: '削除しますか？'}
