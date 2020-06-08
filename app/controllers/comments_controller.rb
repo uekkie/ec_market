@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
     end
 
     if @comment.save
-      redirect_to @post, notice: 'コメントを作成しました'
+      redirect_to user_post_url(@post.user, @post), notice: 'コメントを作成しました'
     else
       render "posts/show"
     end
@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment.destroy!
-    redirect_to @post, notice: 'コメントを削除しました'
+    redirect_to user_post_url(@post.user, @post), notice: 'コメントを削除しました'
   end
 
   private

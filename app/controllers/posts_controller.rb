@@ -7,6 +7,7 @@ class PostsController < ApplicationController
   end
 
   def show
+    @user = current_user
     @comment = Comment.new
   end
 
@@ -18,7 +19,7 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params)
 
     if @post.save
-      redirect_to post_url(@post), notice: '作成しました'
+      redirect_to user_post_url(@post.user, @post), notice: '作成しました'
     else
       render :new
     end
@@ -29,7 +30,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      redirect_to post_url(@post), notice: '更新しました'
+      redirect_to user_post_url(@post.user, @post), notice: '更新しました'
     else
       render :edit
     end
