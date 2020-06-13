@@ -10,19 +10,21 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = current_user.orders.build do |order|
-      order.build_order_items(current_cart)
+    @merchant_id = params[:merchant_id]
+    @order       = current_user.orders.build do |order|
+      order.build_order_items(current_cart, @merchant_id)
       order
     end
   end
 
   def create
+    @merchant_id = params[:order][:merchant_id]
     if current_cart.empty?
       redirect_to new_order_url, alert: 'カートに商品がありません'
     end
 
     @order = current_user.orders.build(order_params) do |order|
-      order.build_order_items(current_cart)
+      order.build_order_items(current_cart, @merchant_id)
       order
     end
 
@@ -31,7 +33,6 @@ class OrdersController < ApplicationController
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'
     else
-      # debugger
       render :new
     end
   end
@@ -39,6 +40,6 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(%i[address ship_time ship_date user_point])
+    params.require(:order).permit(%i[address ship_time ship_date user_point merchant_id])
   end
 end

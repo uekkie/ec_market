@@ -23,8 +23,8 @@ class Order < ApplicationRecord
 
   POSTAGE_FEE = 600
 
-  def build_order_items(cart)
-    cart.cart_items.each do |cart_item|
+  def build_order_items(cart, merchant_id)
+    cart.cart_items_group_by_merchant(merchant_id.to_i).each do |cart_item|
       order_items.build(item: cart_item.item, quantity: cart_item.quantity)
       if self.merchant.nil?
         self.merchant = cart_item.item.merchant
