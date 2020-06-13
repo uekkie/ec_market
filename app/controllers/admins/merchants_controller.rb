@@ -11,6 +11,6 @@ class Admins::MerchantsController < Admins::ApplicationController
   def destroy
     @merchant = Merchant.find(params[:id])
     @merchant.destroy!
-    redirect_to admins_merchants_url, notice: '#{@merchant.name}を削除しました'
+    redirect_to admins_merchants_url, notice: "#{@merchant.name}を削除しました"
   end
 end
