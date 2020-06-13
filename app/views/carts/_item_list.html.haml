@@ -2,6 +2,7 @@
 %table.table.table-striped
   %thead
     %th 商品名
+    %th 業者名
     %th 個数
     %th 小計
     %th
@@ -9,6 +10,7 @@
     - cart_items.each do | cart_item |
       %tr
         %td= cart_item.item.name
+        %td= cart_item.item.merchant.name
         %td
           - if cart_item.quantity > 1
             =link_to '-', update_item_path(item_id: cart_item.item.id, quantity: cart_item.quantity-1), method: :post
