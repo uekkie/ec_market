@@ -1,9 +1,10 @@
+%script{ src: "https://js.stripe.com/v3/" }
+
 =render 'orders/item_list', order: @order
 
 %h4 配送先の情報
 
-= simple_form_for @order, html: { class: 'form-horizontal' }  do |f|
-
+= simple_form_for @order, html: { class: 'form-horizontal', id: "payment-form" }  do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
@@ -18,6 +19,90 @@
     label_method: :second,
     value_method: :first
 
-  = f.input :user_point, label: 'ポイントを利用する', readonly: @order.user.point == 0,  input_html: { min: 0, max: @order.user.point}
-  = "つかえるポイント: #{@order.user.point}"
-  = f.button :submit, '購入を確定する', class: 'btn btn-primary'
+
+  - if @order.user.has_customer_id?
+    .form-row
+      -# = f.input_field '同じカードをつかう', as: :boolean, id: 'aaa'
+      = check_box_tag(:use_registered_card)
+      = label_tag(:use_registered_card, "以前と同じカードで支払う")
+      -#{ class: "boolean optional" id: "user_published" type:"checkbox" value: "1"}
+      以前と同じカードで支払う場合はこちらから。
+      = f.hidden_field :use_registered_id, value: 1
+    = f.submit '登録済みのカードで購入する', class: 'btn btn-success'
+  .form-row
+    %label{ for:"card-element" }
+      クレジット・デビットカード番号
+    #card-element.mt-1{ style: 'width: 500px' }
+    #card-errors{ role: "alert" }
+
+  = f.input :user_point, label: "ポイントを利用する（つかえるポイント: #{@order.user.point}）", readonly: @order.user.point == 0,  input_html: { min: 0, max: @order.user.point}
+  %p
+    %button.mt-1{class:"btn btn-success"} 購入を確定する
+
+
+:javascript
+  var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}');
+  var elements = stripe.elements();
+  var style = {
+    base: {
+      color: '#32325d',
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#aab7c4'
+      }
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a'
+    }
+  };
+  var card = elements.create('card', {style: style, hidePostalCode: true});
+  card.mount('#card-element');
+
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  var form = document.getElementById('payment-form');
+  let handleCardValidation = function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+      if (result.error) {
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+      } else {
+        stripeTokenHandler(result.token);
+      }
+    });
+  }
+  form.addEventListener('submit', handleCardValidation);
+
+  function stripeTokenHandler(token) {
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    form.submit();
+  }
+
+  var check = document.getElementById('use_registered_card');
+  check.addEventListener('change', function(event) {
+    if(check.checked) {
+      form.removeEventListener('submit', handleCardValidation);
+    } else {
+      form.addEventListener('submit', handleCardValidation);
+    }
+
+  });
+

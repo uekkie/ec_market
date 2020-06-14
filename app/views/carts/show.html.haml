@@ -5,6 +5,6 @@
   カートは空です
 - else
   - @cart_items_merchants.each do |merchant, cart_items|
-    %p=merchant.name
+    %h4.mt-5=merchant.name
     =render 'carts/item_list', cart_items: cart_items
-    =link_to '購入に進む', new_order_path( params: {merchant_id: merchant.id } )
+    =link_to '購入に進む', new_order_path( params: {merchant_id: merchant.id } ), class: 'btn btn-primary'

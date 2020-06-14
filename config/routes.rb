@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       resources :comments
       resources :goods, only: %i[create destroy]
     end
+    resources :charges, module: :users, only: %i[new create]
   end
 
   namespace :admins do
