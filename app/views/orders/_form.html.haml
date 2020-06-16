@@ -22,22 +22,24 @@
 
   - if @order.user.has_customer_id?
     .form-row
-      -# = f.input_field '同じカードをつかう', as: :boolean, id: 'aaa'
       = check_box_tag(:use_registered_card)
       = label_tag(:use_registered_card, "以前と同じカードで支払う")
-      -#{ class: "boolean optional" id: "user_published" type:"checkbox" value: "1"}
-      以前と同じカードで支払う場合はこちらから。
-      = f.hidden_field :use_registered_id, value: 1
-    = f.submit '登録済みのカードで購入する', class: 'btn btn-success'
+
+    .form-row
+      = f.hidden_field :use_registered_id, value: 0
+    = f.submit '登録済みのカードで購入する', class: 'btn btn-success', id: 'btn_registered_card', disabled: true
   .form-row
     %label{ for:"card-element" }
       クレジット・デビットカード番号
     #card-element.mt-1{ style: 'width: 500px' }
     #card-errors{ role: "alert" }
 
-  = f.input :user_point, label: "ポイントを利用する（つかえるポイント: #{@order.user.point}）", readonly: @order.user.point == 0,  input_html: { min: 0, max: @order.user.point}
+  = f.input :user_point,
+            label: "ポイントを利用する（つかえるポイント: #{@order.user.point}）",
+            readonly: @order.user.point == 0,
+            input_html: { min: 0, max: @order.user.point}
   %p
-    %button.mt-1{class:"btn btn-success"} 購入を確定する
+    %button.mt-1{class:"btn btn-success", id: 'btn_stripe_card'} 購入を確定する
 
 
 :javascript
@@ -97,11 +99,20 @@
   }
 
   var check = document.getElementById('use_registered_card');
+  var el_use_registered_id = document.getElementById('order_use_registered_id');
+  var el_btn_registered_card = document.getElementById('btn_registered_card')
+  var el_btn_stripe_card = document.getElementById('btn_stripe_card')
   check.addEventListener('change', function(event) {
     if(check.checked) {
       form.removeEventListener('submit', handleCardValidation);
+      el_use_registered_id.value = 1
+      el_btn_registered_card.disabled = false
+      el_btn_stripe_card.disabled = true
     } else {
       form.addEventListener('submit', handleCardValidation);
+      el_use_registered_id.value = 0
+      el_btn_registered_card.disabled = true
+      el_btn_stripe_card.disabled = false
     }
 
   });
