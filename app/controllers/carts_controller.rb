@@ -2,7 +2,7 @@ class CartsController < ApplicationController
   before_action :set_cart_item!, only: %i[add_item update_item delete_item]
 
   def show
-    @cart_items_merchants = current_cart.cart_items.group_by { |cart_item| cart_item.item.merchant }
+    @cart_items_merchants = current_cart.cart_items_merchants
   end
 
   def add_item

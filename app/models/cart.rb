@@ -9,7 +9,11 @@ class Cart < ApplicationRecord
     cart_items.sum(&:subtotal)
   end
 
-  def cart_items_group_by_merchant(merchant_id)
+  def cart_items_merchants
+    cart_items.group_by { |cart_item| cart_item.item.merchant }
+  end
+
+  def filtered_merchant_id(merchant_id)
     cart_items.filter { |cart_item| cart_item.item.merchant.id == merchant_id }
   end
 end
