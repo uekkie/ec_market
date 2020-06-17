@@ -99,7 +99,7 @@ RSpec.describe "Users", type: :system do
 
       visit new_order_path
 
-      fill_in '送り先', with: user.address
+      fill_in '送り先', with: user.shipping_address.address
       select '8時〜12時', from: '配送時間帯'
 
       expect {
@@ -116,7 +116,7 @@ RSpec.describe "Users", type: :system do
 
       visit new_order_path
 
-      fill_in '送り先', with: user.address
+      fill_in '送り先', with: user.shipping_address.address
       select '8時〜12時', from: '配送時間帯'
       fill_in 'ポイントを利用する', with: 100
 

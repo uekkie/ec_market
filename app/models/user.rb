@@ -11,6 +11,8 @@ class User < ApplicationRecord
 
   has_many :coupons, dependent: :destroy
 
+  has_one :shipping_address, dependent: :destroy, class_name: 'ShippingAddress'
+
   scope :normal, -> { where(admin: false) }
   scope :recent, -> { order(created_at: :desc) }
 
