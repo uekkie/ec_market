@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_01_231120) do
+ActiveRecord::Schema.define(version: 2020_06_17_214640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,14 +122,21 @@ ActiveRecord::Schema.define(version: 2020_06_01_231120) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "shipping_addresses", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "address", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_shipping_addresses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "name", default: "", null: false
-    t.string "address", default: "", null: false
     t.string "stripe_customer_id", default: "", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -154,4 +161,5 @@ ActiveRecord::Schema.define(version: 2020_06_01_231120) do
   add_foreign_key "orders", "merchants"
   add_foreign_key "orders", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "shipping_addresses", "users"
 end
