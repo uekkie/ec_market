@@ -19,6 +19,7 @@
     label_method: :second,
     value_method: :first
 
+  %h4 支払い方法
 
   - if @order.user.has_customer_id?
     .form-row
@@ -27,7 +28,6 @@
 
     .form-row
       = f.hidden_field :use_registered_id, value: 0
-    = f.submit '登録済みのカードで購入する', class: 'btn btn-success', id: 'btn_registered_card', disabled: true
   .form-row
     %label{ for:"card-element" }
       クレジット・デビットカード番号
@@ -100,19 +100,14 @@
 
   var check = document.getElementById('use_registered_card');
   var el_use_registered_id = document.getElementById('order_use_registered_id');
-  var el_btn_registered_card = document.getElementById('btn_registered_card')
-  var el_btn_stripe_card = document.getElementById('btn_stripe_card')
+
   check.addEventListener('change', function(event) {
     if(check.checked) {
       form.removeEventListener('submit', handleCardValidation);
       el_use_registered_id.value = 1
-      el_btn_registered_card.disabled = false
-      el_btn_stripe_card.disabled = true
     } else {
       form.addEventListener('submit', handleCardValidation);
       el_use_registered_id.value = 0
-      el_btn_registered_card.disabled = true
-      el_btn_stripe_card.disabled = false
     }
 
   });
