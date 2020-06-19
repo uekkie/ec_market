@@ -13,6 +13,7 @@ class OrdersController < ApplicationController
     @merchant_id = params[:merchant_id]
     @order       = current_user.orders.build do |order|
       order.build_order_items(current_cart, @merchant_id)
+      order.address = current_user.shipping_address&.address
       order
     end
   end

@@ -17,7 +17,7 @@ class User < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
 
   def display_name
-    name.present? ? name : email
+    nick_name.present? ? nick_name : email
   end
 
   def charge_coupon(coupon)
@@ -50,13 +50,6 @@ class User < ApplicationRecord
     self.update_attribute(:stripe_customer_id, customer.id)
     customer
   end
-
-  # def update_stripe_token(stripe_token)
-  #   return false if self.customer.blank?
-  #
-  #   Stripe::Customer.update(self.customer.id, source: stripe_token)
-  #   true
-  # end
 
   def charge(customer, price)
     Stripe::Charge.create(

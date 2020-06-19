@@ -93,7 +93,7 @@ RSpec.describe "Users", type: :system do
     let!(:merchant) { create(:merchant) }
     let!(:item) { create(:item, name: "りんご", price: 300, merchant: merchant) }
 
-    it '商品を購入できる' do
+    it '商品を購入できる', js: true do
       visit item_path(item)
       click_on 'カートに追加'
 

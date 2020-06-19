@@ -24,6 +24,9 @@ ja:
       post: 日記
       comment: コメント
     attributes:
+      user:
+        avatar: プロフィール画像
+        nick_name: ニックネーム
       item:
         name: 商品名
         price: 価格
