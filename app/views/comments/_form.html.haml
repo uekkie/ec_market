@@ -1,10 +1,14 @@
 -# frozen_string_literal: true
-= simple_form_for([@user, @post, @comment]) do |f|
-  = f.error_notification
-  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+- if user_signed_in?
+  = simple_form_for( [current_user, @post, current_user.comments.build]) do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
-  .form-inputs
-    =f.input :body, as: :text
+    .form-inputs
+      =f.input :body, as: :text
 
-  .form-actions
-    = f.button :submit, 'コメントする', class: 'btn btn-primary'
+    .form-actions
+      = f.button :submit, 'コメントする', class: 'btn btn-primary'
+- else
+  = link_to 'ログイン', new_session_path
+  するとコメントができます。
