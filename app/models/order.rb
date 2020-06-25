@@ -62,8 +62,9 @@ class Order < ApplicationRecord
     end
   end
 
+
   def postage
-    ((amount / 5) + 1) * POSTAGE_FEE
+    ((amount / merchant.quantity_per_box) + 1) * POSTAGE_FEE
   end
 
   def total
