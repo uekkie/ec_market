@@ -1,0 +1,11 @@
+%h1.h3 業者情報
+
+.form-inputs
+  = @merchant.name
+.form-inputs
+  = @merchant.email
+
+%h2.h4 商品点数の設定
+= simple_form_for @merchant do |f|
+  = f.input :quantity_per_box
+  = f.submit '変更する', class: 'btn btn-primary'

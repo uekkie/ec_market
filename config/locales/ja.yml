@@ -55,6 +55,7 @@ ja:
       merchant:
         name: 業者名
         email: メールアドレス
+        quantity_per_box: １箱あたりの商品点数
         password: パスワード
         password_confirmation: パスワード確認
         current_password: 現在のパスワード
