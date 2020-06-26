@@ -11,7 +11,7 @@ class Order < ApplicationRecord
 
   belongs_to :user
   belongs_to :merchant
-  has_many :order_items
+  has_many :order_items, dependent: :destroy
 
   validates :address, :ship_time, :ship_date, presence: true
 
