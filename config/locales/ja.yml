@@ -1,5 +1,5 @@
 ja:
-  enums:
+  enumerize:
     order:
       status:
         ordered: '注文済み'

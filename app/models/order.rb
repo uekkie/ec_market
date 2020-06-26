@@ -1,4 +1,6 @@
 class Order < ApplicationRecord
+  extend Enumerize
+
   before_validation do
     if self.user_point > self.user.point
       self.errors.add(:user_point, '上限を超えています')
@@ -17,7 +19,7 @@ class Order < ApplicationRecord
   # 発送処理中
   # 処理中発送済み
   # キャンセル
-  enum status: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }
+  enumerize :status, in: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }, default: :ordered
 
   scope :recent, -> { order(created_at: :desc) }
 
