@@ -46,4 +46,10 @@ RSpec.describe "Merchant", type: :system do
       }.to change { Item.count }.by(-1)
     end
   end
+
+  describe '送料' do
+    it '業者が1箱の送料を設定できる' do
+
+    end
+  end
 end

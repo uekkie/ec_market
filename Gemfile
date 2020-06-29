@@ -25,7 +25,8 @@ gem 'acts_as_list'
 
 gem 'carrierwave'
 gem 'cloudinary'
-gem 'enum_help'
+gem 'enumerize'
+gem 'gon'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

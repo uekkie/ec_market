@@ -6,10 +6,11 @@ class OrdersController < ApplicationController
   end
 
   def show
-
+    @order = current_user.orders.find(params[:id])
   end
 
   def new
+    gon.stripe_publishable_key = Rails.configuration.stripe[:publishable_key]
     @merchant_id = params[:merchant_id]
     @order       = current_user.orders.build do |order|
       order.build_order_items(current_cart, @merchant_id)
@@ -22,18 +23,13 @@ class OrdersController < ApplicationController
     if current_cart.empty?
       redirect_to new_order_url, alert: 'カートに商品がありません'
     end
-    @merchant_id = params[:order][:merchant_id]
-
-    customer = params[:use_registered_id].present? ?
-                   current_user.customer :
-                   current_user.attach_customer(params[:stripeToken])
 
     @order = current_user.orders.build(order_params) do |order|
-      order.build_order_items(current_cart, @merchant_id)
+      order.build_order_items(current_cart, order.merchant.id)
       order
     end
 
-    if @order.save && current_user.charge(customer, @order.total_with_tax)
+    if @order.save_and_charge(params[:use_registered_id], params[:stripeToken])
       current_user.use_point(@order)
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'
@@ -45,6 +41,6 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(%i[address ship_time ship_date user_point merchant_id])
+    params.require(:order).permit(%i[address ship_time ship_date user_point merchant_id purchased_type])
   end
 end

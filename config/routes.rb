@@ -56,7 +56,9 @@ Rails.application.routes.draw do
   namespace :merchants do
     resources :items
   end
-  resources :merchants, only: [:show]
+  resources :merchants, only: %i[show update] do
+    get :profile, action: :profile, on: :collection
+  end
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: '/lo'

@@ -10,18 +10,22 @@ class Merchant < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :orders
 
-  def prepare_shipping(order)
+  def own_order(order)
     raise unless self == order.merchant
+  end
+
+  def prepare_shipping(order)
+    own_order(order)
     order.prepare_shipping!
   end
 
   def shipped(order)
-    raise unless self == order.merchant
+    own_order(order)
     order.shipped!
   end
 
   def cancel(order)
-    raise unless self == order.merchant
+    own_order(order)
     order.canceled!
   end
 end

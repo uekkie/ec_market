@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_20_005334) do
+ActiveRecord::Schema.define(version: 2020_06_29_010328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 2020_06_20_005334) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "quantity_per_box", default: 5, null: false
     t.index ["email"], name: "index_merchants_on_email", unique: true
     t.index ["reset_password_token"], name: "index_merchants_on_reset_password_token", unique: true
   end
@@ -107,6 +108,7 @@ ActiveRecord::Schema.define(version: 2020_06_20_005334) do
     t.integer "user_point", default: 0, null: false
     t.integer "status", default: 0, null: false
     t.bigint "merchant_id", null: false
+    t.integer "purchased_type", default: 0, null: false
     t.index ["merchant_id"], name: "index_orders_on_merchant_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -146,6 +148,7 @@ ActiveRecord::Schema.define(version: 2020_06_20_005334) do
     t.integer "point", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id"
   end
 
   add_foreign_key "cart_items", "carts"

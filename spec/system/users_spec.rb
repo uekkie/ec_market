@@ -102,7 +102,7 @@ RSpec.describe "Users", type: :system do
         visit item_path(item)
         click_on 'カートに追加'
 
-        visit new_order_path
+        visit new_order_path(merchant_id: merchant.id)
 
         fill_in '送り先', with: user.shipping_address.address
         select '8時〜12時', from: '配送時間帯'
@@ -119,7 +119,7 @@ RSpec.describe "Users", type: :system do
         visit item_path(item)
         click_on 'カートに追加'
 
-        visit new_order_path
+        visit new_order_path(merchant_id: merchant.id)
 
         fill_in '送り先', with: user.shipping_address.address
         select '8時〜12時', from: '配送時間帯'
@@ -135,6 +135,24 @@ RSpec.describe "Users", type: :system do
         expect(user.point).to eq 0
         order = Order.last
         expect(order.total_price).to eq order.total_with_tax - order.user_point
+      end
+
+      it 'クレジットカードで支払いできる', js: true do
+        visit item_path(item)
+        click_on 'カートに追加'
+
+        visit new_order_path(merchant_id: merchant.id)
+
+        fill_in '送り先', with: user.shipping_address.address
+        select '8時〜12時', from: '配送時間帯'
+
+        choose 'クレジットカード'
+        fill_stripe_elements(card: '4242 4242 4242 4242')
+
+        expect {
+          click_on '購入を確定する'
+          expect(page).to have_content '注文を受け付けました！'
+        }.to change { Order.count }.by(1)
       end
     end
   end

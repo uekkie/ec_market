@@ -1,4 +1,6 @@
 class Order < ApplicationRecord
+  extend Enumerize
+
   before_validation do
     if self.user_point > self.user.point
       self.errors.add(:user_point, '上限を超えています')
@@ -9,7 +11,7 @@ class Order < ApplicationRecord
 
   belongs_to :user
   belongs_to :merchant
-  has_many :order_items
+  has_many :order_items, dependent: :destroy
 
   validates :address, :ship_time, :ship_date, presence: true
 
@@ -17,7 +19,9 @@ class Order < ApplicationRecord
   # 発送処理中
   # 処理中発送済み
   # キャンセル
-  enum status: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }
+  enumerize :status, in: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }, default: :ordered
+
+  enumerize :purchased_type, in: { cash_on_delivery: 0, credit_card: 1 }, default: :cash_on_delivery
 
   scope :recent, -> { order(created_at: :desc) }
 
@@ -49,6 +53,7 @@ class Order < ApplicationRecord
   end
 
   def delivery_fee
+    return 0 if self.purchased_type.credit_card?
 
     case subtotal
     when 0...10000
@@ -62,8 +67,9 @@ class Order < ApplicationRecord
     end
   end
 
+
   def postage
-    ((amount / 5) + 1) * POSTAGE_FEE
+    ((amount / merchant.quantity_per_box) + 1) * POSTAGE_FEE
   end
 
   def total
@@ -74,4 +80,35 @@ class Order < ApplicationRecord
     (total + tax_fee).round(-1)
   end
 
+  def prepare_shipping!
+    self.update!(status: :prepare_shipping)
+  end
+
+  def shipped!
+    self.update!(status: :shipped)
+  end
+
+  def canceled!
+    self.update!(status: :canceled)
+  end
+
+  def save_and_charge(use_registered_id, stripeToken)
+    Order.transaction(joinable: false, requires_new: true) do
+      if !self.save
+        ActiveRecord::Rollback
+      end
+
+      if self.purchased_type.credit_card?
+        customer = use_registered_id ?
+                     self.user.customer :
+                     self.user.attach_customer(stripeToken)
+        unless self.user.charge(customer, self.total_with_tax)
+          self.errors.add(:base, 'Stripeでの決済に失敗しました。カード情報をお確かめください。')
+          logger.error('Stripeでの決済に失敗しました' + "customer.id = [#{customer&.id.to_s}]")
+          raise ActiveRecord::Rollback
+        end
+      end
+      true
+    end
+  end
 end
