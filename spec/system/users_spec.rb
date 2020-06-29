@@ -102,7 +102,7 @@ RSpec.describe "Users", type: :system do
         visit item_path(item)
         click_on 'カートに追加'
 
-        visit new_order_path
+        visit new_order_path(merchant_id: merchant.id)
 
         fill_in '送り先', with: user.shipping_address.address
         select '8時〜12時', from: '配送時間帯'
@@ -119,7 +119,7 @@ RSpec.describe "Users", type: :system do
         visit item_path(item)
         click_on 'カートに追加'
 
-        visit new_order_path
+        visit new_order_path(merchant_id: merchant.id)
 
         fill_in '送り先', with: user.shipping_address.address
         select '8時〜12時', from: '配送時間帯'
