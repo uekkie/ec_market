@@ -21,6 +21,8 @@ class Order < ApplicationRecord
   # キャンセル
   enumerize :status, in: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }, default: :ordered
 
+  enumerize :purchased_type, in: { cash_on_delivery: 0, credit_card: 1 }, default: :cash_on_delivery
+
   scope :recent, -> { order(created_at: :desc) }
 
   POSTAGE_FEE = 600
@@ -77,4 +79,15 @@ class Order < ApplicationRecord
     (total + tax_fee).round(-1)
   end
 
+  def prepare_shipping!
+    self.update!(status: :prepare_shipping)
+  end
+
+  def shipped!
+    self.update!(status: :shipped)
+  end
+
+  def canceled!
+    self.update!(status: :canceled)
+  end
 end

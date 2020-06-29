@@ -6,6 +6,9 @@ ja:
         prepare_shipping: '発送準備中'
         shipped: '発送済み'
         canceled: 'キャンセル'
+      purchased_type:
+        cash_on_delivery: '代金引換'
+        credit_card: 'クレジットカード'
   time:
     formats:
       short: "%Y年%m月%d日"
@@ -42,6 +45,8 @@ ja:
         ship_date: 配達日
         user_point: ポイント
         satus: 注文の状態
+        purchased_type: 支払い方法
+
       post:
         title: タイトル
         content: 本文

@@ -19,7 +19,7 @@
     label_method: :second,
     value_method: :first
 
-  %h4 支払い方法
+  = f.input :purchased_type, as: :radio_buttons, id: 'purchased_type'
 
   - if @order.user.has_customer_id?
     .form-row
@@ -76,6 +76,12 @@
   let handleCardValidation = function(event) {
     event.preventDefault();
 
+    if (skip_card_validation()){
+      var form = document.getElementById('payment-form');
+      form.submit();
+      return
+    }
+
     stripe.createToken(card).then(function(result) {
       if (result.error) {
         var errorElement = document.getElementById('card-errors');
@@ -98,17 +104,14 @@
     form.submit();
   }
 
-  var check = document.getElementById('use_registered_card');
-  var el_use_registered_id = document.getElementById('order_use_registered_id');
+  function skip_card_validation() {
+    var radio_cash_on_delivery = document.getElementById('order_purchased_type_cash_on_delivery');
+    if(radio_cash_on_delivery  && radio_cash_on_delivery.checked)
+      return true
 
-  check.addEventListener('change', function(event) {
-    if(check.checked) {
-      form.removeEventListener('submit', handleCardValidation);
-      el_use_registered_id.value = 1
-    } else {
-      form.addEventListener('submit', handleCardValidation);
-      el_use_registered_id.value = 0
-    }
+    var radio_use_registered_card = document.getElementById('use_registered_card');
 
-  });
+    if(radio_use_registered_card  && radio_use_registered_card.checked)
+      return true
+  }
 

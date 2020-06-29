@@ -11,6 +11,8 @@
           #{l(order.created_at, format: :short)}
         .col 合計 #{number_to_currency(order.total_price)}
         .col お届け先 #{order.address}
+        .col.purchased_type
+          = order.purchased_type_text
         .col.order_status
           = order.status_text
           - if order.status.ordered?
