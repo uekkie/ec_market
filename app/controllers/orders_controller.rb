@@ -28,18 +28,7 @@ class OrdersController < ApplicationController
       order
     end
 
-    if @order.purchased_type.credit_card?
-      customer = params[:use_registered_id].present? ?
-                   current_user.customer :
-                   current_user.attach_customer(params[:stripeToken])
-      unless current_user.charge(customer, @order.total_with_tax)
-        @order.errors.add(:customer, 'Stripeでの決済に失敗しました。カード情報をお確かめください。')
-        render :new
-        return
-      end
-    end
-
-    if @order.save
+    if @order.save_and_charge(params[:use_registered_id], params[:stripeToken])
       current_user.use_point(@order)
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'

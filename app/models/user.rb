@@ -45,23 +45,30 @@ class User < ApplicationRecord
 
   def attach_customer(stripe_token)
     customer = Stripe::Customer.create(
-        email:  email,
-        source: stripe_token
+      email: email,
+      source: stripe_token
     )
     self.update_attribute(:stripe_customer_id, customer.id)
     customer
+  rescue Stripe::CardError => e
+    self.errors.add(:base, e.message)
+    logger.error(e.message)
+    nil
   end
 
   def charge(customer, price)
+    return false unless customer.present?
+
     Stripe::Charge.create(
-        :customer    => customer.id,
-        :amount      => price,
-        :description => "商品代金",
-        :currency    => "jpy"
+      :customer => customer.id,
+      :amount => price,
+      :description => "商品代金",
+      :currency => "jpy"
     )
     true
   rescue Stripe::CardError => e
-    flash[:error] = e.message
+    self.errors.add(:base, e.message)
+    logger.error(e.message)
     false
   end
 end

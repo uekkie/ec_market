@@ -43,7 +43,7 @@
 
 
 :javascript
-  var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}');
+  var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}', {locale: 'ja'});
   var elements = stripe.elements();
   var style = {
     base: {
