@@ -14,6 +14,6 @@ class Cart < ApplicationRecord
   end
 
   def filtered_merchant_id(merchant_id)
-    cart_items.filter { |cart_item| cart_item.item.merchant.id == merchant_id }
+    cart_items.joins(:item).where(items: { merchant_id: merchant_id })
   end
 end
