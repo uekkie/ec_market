@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_010328) do
     t.integer "point", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id"
   end
 
   add_foreign_key "cart_items", "carts"
