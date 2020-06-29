@@ -53,6 +53,7 @@ class Order < ApplicationRecord
   end
 
   def delivery_fee
+    return 0 if self.purchased_type.credit_card?
 
     case subtotal
     when 0...10000

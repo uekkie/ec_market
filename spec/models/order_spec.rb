@@ -67,4 +67,28 @@ RSpec.describe Order, type: :model do
       expect(order2.total_with_tax).to eq 4540
     end
   end
+
+  describe '代引き手数料' do
+    it '商品代金に応じて手数料が上がる' do
+      item = create(:item, price: 1000)
+      order_for_fee = create(:order, user: user, merchant: merchant) do |order|
+        order.order_items.create(item: create(:item, price: 1000), quantity: 10)
+      end
+      expect(order_for_fee.subtotal).to eq 10_000
+      expect(order_for_fee.delivery_fee).to eq 400
+
+      order_for_fee.order_items.create(item: item, quantity: 20)
+      expect(order_for_fee.subtotal).to eq 30_000
+      expect(order_for_fee.delivery_fee).to eq 600
+
+      order_for_fee.order_items.create(item: item, quantity: 70)
+      expect(order_for_fee.subtotal).to eq 100_000
+      expect(order_for_fee.delivery_fee).to eq 1000
+    end
+
+    it 'クレジットカード払いは代引き手数料がかからない' do
+      order.purchased_type = :credit_card
+      expect(order.delivery_fee).to eq 0
+    end
+  end
 end
