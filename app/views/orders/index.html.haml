@@ -17,15 +17,15 @@
           = order.status_text
           - if order.status.ordered?
             = link_to '注文のキャンセル', users_order_status_path(order, order: { status: :canceled }), method: :put, data: {confirm: 'キャンセルしてよろしいですか？'}
-        .col= link_to '注文の詳細', "#"
-    - order.order_items.includes(:item).each do |order_item|
-      %li.list-group-item
-        お届け予定日 #{ l(order.ship_date, format: :long) }
+        .col= link_to '注文の詳細', order_path(order)
+    - order.order_items.includes(:item).each_with_index do | order_item, i|
+      - if i == 0
+        %li.list-group-item
+          お届け予定日 #{ l(order.ship_date, format: :long) }
       %li.list-group-item
         .row
           .col
             = render 'items/item_image', item: order_item.item
-          .col
             = link_to item_path(order_item.item) do
               = order_item.item.name
               - if order_item.quantity > 1
