@@ -10,6 +10,7 @@ class OrdersController < ApplicationController
   end
 
   def new
+    gon.stripe_publishable_key = Rails.configuration.stripe[:publishable_key]
     @merchant_id = params[:merchant_id]
     @order       = current_user.orders.build do |order|
       order.build_order_items(current_cart, @merchant_id)
