@@ -94,21 +94,25 @@ class Order < ApplicationRecord
 
   def save_and_charge(use_registered_id, stripeToken)
     Order.transaction(joinable: false, requires_new: true) do
-      if !self.save
-        ActiveRecord::Rollback
-      end
+      self.save!
 
       if self.purchased_type.credit_card?
-        customer = use_registered_id ?
-                     self.user.customer :
-                     self.user.attach_customer(stripeToken)
-        unless self.user.charge(customer, self.total_with_tax)
-          self.errors.add(:base, 'Stripeでの決済に失敗しました。カード情報をお確かめください。')
-          logger.error('Stripeでの決済に失敗しました' + "customer.id = [#{customer&.id.to_s}]")
-          raise ActiveRecord::Rollback
+        begin
+          customer = use_registered_id ?
+                         self.user.customer :
+                         self.user.attach_customer(stripeToken)
+
+          self.user.charge(customer,
+                           self.total_with_tax)
+
+        rescue Stripe::CardError => e
+          logger.error('[ERROR][Orders#save_and_change] Stripeでの決済に失敗しました。' + e.message)
+          self.errors.add(:base, 'Stripeでの決済に失敗しました。カード情報を確認してください。')
+          return false
         end
       end
-      true
+      return true
     end
+    false
   end
 end

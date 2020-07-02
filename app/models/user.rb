@@ -50,25 +50,15 @@ class User < ApplicationRecord
     )
     self.update_attribute(:stripe_customer_id, customer.id)
     customer
-  rescue Stripe::CardError => e
-    self.errors.add(:base, e.message)
-    logger.error(e.message)
-    nil
   end
 
   def charge(customer, price)
     return false unless customer.present?
-
     Stripe::Charge.create(
       :customer => customer.id,
       :amount => price,
       :description => "商品代金",
       :currency => "jpy"
     )
-    true
-  rescue Stripe::CardError => e
-    self.errors.add(:base, e.message)
-    logger.error(e.message)
-    false
   end
 end
