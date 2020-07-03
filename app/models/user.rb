@@ -48,7 +48,7 @@ class User < ApplicationRecord
       email: email,
       source: stripe_token
     )
-    self.update_attribute(:stripe_customer_id, customer.id)
+    self.update!(stripe_customer_id: customer.id)
     customer
   end
 
