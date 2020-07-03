@@ -106,6 +106,7 @@ RSpec.describe "Users", type: :system do
 
         fill_in '送り先', with: user.shipping_address.address
         select '8時〜12時', from: '配送時間帯'
+        choose '代金引換'
 
         expect {
           click_on '購入を確定する'
