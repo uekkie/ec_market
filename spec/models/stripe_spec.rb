@@ -40,4 +40,16 @@ RSpec.describe StripeMock, type: :model do
     user.reload
     expect(user.stripe_customer_id).to eq prev_stripe_id
   end
+
+  it "以前と同じカードで決済できること" do
+
+    build_order.user.update!(stripe_customer_id: Stripe::Customer.create(
+      email: user.email,
+      source: stripe_helper.generate_card_token
+    ).id)
+
+    expect {
+      expect(build_order.save_and_charge(true, stripe_helper.generate_card_token)).to be_truthy
+    }.to change { Order.count }.by(1)
+  end
 end
