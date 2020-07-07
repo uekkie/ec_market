@@ -1,0 +1,37 @@
+%h1 注文の詳細
+
+%table.table.table-striped
+  %tr
+    %td 注文日
+    %td= l(@order.created_at, format: :short)
+  %tr
+    %td 合計
+    %td= number_to_currency(@order.total_price)
+  %tr
+    %td お届け先
+    %td= @order.address
+  %tr
+    %td 支払い方法
+    %td= @order.purchased_type_text
+  %tr
+    %td 注文の状態
+    %td
+      = @order.status_text
+      - if @order.status.ordered?
+        %br
+        =link_to '注文のキャンセル', users_order_status_path(@order, order: { status: :canceled }), method: :put, data: {confirm: 'キャンセルしてよろしいですか？'}
+
+%h1.h3 商品の内容
+%table.table.table-striped
+  - @order.order_items.includes(:item).each_with_index do |order_item, i|
+    - if i == 0
+      %tr
+        %td お届け予定日
+        %td= l(@order.ship_date, format: :long)
+    %tr
+      %td{colspan: 2}
+        = render 'items/item_image', item: order_item.item
+        = link_to item_path(order_item.item) do
+          = order_item.item.name
+          - if order_item.quantity > 1
+            、数量 #{order_item.quantity}

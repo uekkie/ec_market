@@ -17,118 +17,236 @@ RSpec.describe "Users", type: :system do
   end
 
 
-  context "管理者でログインしているとき" do
-    let!(:admin) { create(:admin) }
-    let!(:user) { create(:user) }
+  describe 'クーポン' do
 
-    before { sign_in admin }
+    context "管理者でログインしているとき" do
+      let!(:admin) { create(:admin) }
+      let!(:user) { create(:user) }
 
-    it 'クーポンのCRUDができる' do
-      visit admins_coupons_path
-      click_on 'クーポンコードを発行'
+      before { sign_in admin }
 
-      fill_in 'ポイント', with: 1000
-      expect {
-        click_on '登録する'
-      }.to change { Coupon.count }.by(1)
+      it 'CRUDができる' do
+        visit admins_coupons_path
+        click_on 'クーポンコードを発行'
 
-      coupon = Coupon.last
-      expect(coupon.point).to eq 1000
+        fill_in 'ポイント', with: 1000
+        expect {
+          click_on '登録する'
+        }.to change { Coupon.count }.by(1)
 
-      click_on coupon.display_code
+        coupon = Coupon.last
+        expect(coupon.point).to eq 1000
 
-      expect(page).to have_content '1000'
-      expect(page).to have_content coupon.display_code
+        click_on coupon.display_code
 
-      first('tbody tr').click_link '変更'
+        expect(page).to have_content '1000'
+        expect(page).to have_content coupon.display_code
 
-      fill_in 'ポイント', with: 2000
-      click_on '更新する'
+        first('tbody tr').click_link '変更'
 
-      coupon.reload
-      expect(coupon.point).to eq 2000
+        fill_in 'ポイント', with: 2000
+        click_on '更新する'
+
+        coupon.reload
+        expect(coupon.point).to eq 2000
+      end
+
+      it '削除できる', js: true do
+        create(:coupon)
+
+        visit admins_coupons_path
+        expect {
+          first('tbody tr').click_link '削除'
+          expect(page.driver.browser.switch_to.alert.text).to eq '削除しますか？'
+          page.accept_confirm
+          expect(current_path).to eq admins_coupons_path
+        }.to change { Coupon.count }.by(-1)
+      end
+
+      it 'ユーザーのポイントを増減できる' do
+
+        visit edit_users_point_path(user)
+
+        fill_in '変更後のポイント', with: '500'
+        expect {
+          click_on 'ポイントを更新'
+          user.reload
+        }.to change { user.point }.by(500)
+      end
     end
+  end
 
-    it 'クーポンを削除できる', js: true do
-      create(:coupon)
+  describe 'カート' do
+    context "ユーザーでログインしているとき" do
+      before { sign_in user }
+      let!(:item) { create(:item, name: "りんご", price: 300) }
 
-      visit admins_coupons_path
-      expect {
-        first('tbody tr').click_link '削除'
-        expect(page.driver.browser.switch_to.alert.text).to eq '削除しますか？'
-        page.accept_confirm
-        expect(current_path).to eq admins_coupons_path
-      }.to change { Coupon.count }.by(-1)
+      it "商品をカートに入れられる" do
+        visit item_path(item)
+        expect {
+          click_button 'カートに追加'
+          expect(current_path).to eq item_path(item)
+        }.to change { CartItem.count }.by(1)
+      end
     end
+  end
 
-    it 'ユーザーのポイントを増減できる' do
+  describe '注文' do
 
-      visit edit_users_point_path(user)
+    context 'カートに商品が入っているとき' do
+      before { sign_in user }
+      let!(:merchant) { create(:merchant) }
+      let!(:item) { create(:item, name: "りんご", price: 300, merchant: merchant) }
 
-      fill_in '変更後のポイント', with: '500'
-      expect {
-        click_on 'ポイントを更新'
+      it '商品を購入できる', js: true do
+        visit item_path(item)
+        click_on 'カートに追加'
+
+        visit new_order_path(merchant_id: merchant.id)
+
+        fill_in '送り先', with: user.shipping_address.address
+        select '8時〜12時', from: '配送時間帯'
+        choose '代金引換'
+
+        expect {
+          click_on '購入を確定する'
+        }.to change { Order.count }.by(1)
+      end
+
+      it '注文時にポイントが利用できる' do
+        coupon_100 = create(:coupon, point: 100)
+        user.charge_coupon(coupon_100)
+
+        visit item_path(item)
+        click_on 'カートに追加'
+
+        visit new_order_path(merchant_id: merchant.id)
+
+        fill_in '送り先', with: user.shipping_address.address
+        select '8時〜12時', from: '配送時間帯'
+        fill_in 'ポイントを利用する', with: 100
+
+        expect(user.point).to eq 100
+
+        expect {
+          click_on '購入を確定する'
+        }.to change { Order.count }.by(1)
+
         user.reload
-      }.to change { user.point }.by(500)
+        expect(user.point).to eq 0
+        order = Order.last
+        expect(order.total_price).to eq order.total_with_tax - order.user_point
+      end
+
+      it 'クレジットカードで支払いできる', js: true do
+        visit item_path(item)
+        click_on 'カートに追加'
+
+        visit new_order_path(merchant_id: merchant.id)
+
+        fill_in '送り先', with: user.shipping_address.address
+        select '8時〜12時', from: '配送時間帯'
+
+        choose 'クレジットカード'
+        fill_stripe_elements(card: '4242 4242 4242 4242')
+
+        expect {
+          click_on '購入を確定する'
+          expect(page).to have_content '注文を受け付けました！'
+        }.to change { Order.count }.by(1)
+      end
     end
   end
 
-  context "ユーザーでログインしているとき" do
-
-    before { sign_in user }
-    let!(:item) { create(:item, name: "りんご", price: 300) }
+  describe '注文のステータス' do
 
 
-    it "商品をカートに入れられる" do
-      visit item_path(item)
-      expect {
-        click_button 'カートに追加'
-        expect(current_path).to eq item_path(item)
-      }.to change { CartItem.count }.by(1)
+    context '商品注文後' do
+      before { sign_in user }
+      let!(:merchant) { create(:merchant) }
+      let!(:order) {
+        create(:order, user: user, merchant: merchant) do |order|
+          order.order_items.create(item: create(:item, merchant: merchant), quantity: 2)
+        end
+      }
+
+      it 'ステータスが「注文済み」であればキャンセルできる', js: true do
+        visit orders_path
+
+        expect(first('.order_status')).to have_content '注文済み'
+
+        expect {
+          click_on '注文のキャンセル'
+          expect(page.driver.browser.switch_to.alert.text).to eq 'キャンセルしてよろしいですか？'
+          page.accept_confirm
+          expect(current_path).to eq orders_path
+        }.to change { Order.where(status: :canceled).count }.by(1)
+        expect(page).to have_content 'キャンセルしました'
+      end
+
+      it 'ステータスが「発送準備中」であればキャンセルできない' do
+        order.prepare_shipping!
+        visit orders_path
+        expect(page).to have_content '発送準備中'
+        expect(page).to have_no_content '注文のキャンセル'
+      end
+
+      it 'ステータスが「発送中」であればキャンセルできない' do
+        order.shipped!
+        visit orders_path
+        expect(page).to have_content '発送済み'
+        expect(page).to have_no_content '注文のキャンセル'
+      end
     end
   end
+end
 
-  context 'カートに商品が入っているとき' do
-    before { sign_in user }
-    let!(:item) { create(:item, name: "りんご", price: 300) }
 
-    it '商品を購入できる' do
-      visit item_path(item)
-      click_on 'カートに追加'
+RSpec.describe "Admins", type: :system do
+  let!(:admin) { create(:admin) }
+  before { sign_in admin }
 
-      visit new_order_path
+  it '業者アカウントの追加・更新' do
+    visit profile_users_path
 
-      fill_in '送り先', with: user.address
-      select '8時〜12時', from: '配送時間帯'
+    click_on '業者アカウントの管理'
 
-      expect {
-        click_on '購入を確定する'
-      }.to change { Order.count }.by(1)
-    end
+    click_on '新規追加'
 
-    it '注文時にポイントが利用できる' do
-      coupon_100 = create(:coupon, point: 100)
-      user.charge_coupon(coupon_100)
+    fill_in '業者名', with: 'まるお青果店'
+    fill_in 'メールアドレス', with: 'maruo@example.com'
+    fill_in 'パスワード', with: 'aaaaaa', match: :first
+    fill_in 'パスワード確認', with: 'aaaaaa'
 
-      visit item_path(item)
-      click_on 'カートに追加'
+    expect {
+      click_on '登録する'
+    }.to change { Merchant.count }.by(1)
 
-      visit new_order_path
+    expect(current_path).to eq admins_merchants_path
 
-      fill_in '送り先', with: user.address
-      select '8時〜12時', from: '配送時間帯'
-      fill_in 'ポイントを利用する', with: 100
+    first('tbody tr').click_link '編集'
 
-      expect(user.point).to eq 100
+    fill_in '業者名', with: 'マルオフルーツ'
 
-      expect {
-        click_on '購入を確定する'
-      }.to change { Order.count }.by(1)
+    fill_in '現在のパスワード', with: 'aaaaaa'
 
-      user.reload
-      expect(user.point).to eq 0
-      order = Order.last
-      expect(order.total_price).to eq order.total_with_tax - order.user_point
-    end
+    click_on '更新する'
+
+    expect(current_path).to eq admins_merchants_path
+    expect(first('tbody tr')).to have_content 'マルオフルーツ'
+
+  end
+
+  it '業者を削除できる', js: true do
+    merchant = create(:merchant)
+
+    visit admins_merchants_path
+
+    expect {
+      first('tbody tr').click_link '削除'
+      expect(page.driver.browser.switch_to.alert.text).to eq '削除してよろしいですか？'
+      page.accept_confirm
+      expect(current_path).to eq admins_merchants_path
+    }.to change { Merchant.count }.by(-1)
   end
 end

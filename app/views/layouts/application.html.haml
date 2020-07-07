@@ -6,9 +6,13 @@
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_pack_tag 'application'
+    = include_gon
     = javascript_pack_tag 'application'
   %body
-    = render "layouts/header"
+    - if merchant_signed_in?
+      = render "layouts/merchants/header"
+    - else
+      = render "layouts/header"
     .container.mt-3
       - if alert
         %p.alert.alert-danger= alert

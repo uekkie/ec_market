@@ -5,5 +5,6 @@ FactoryBot.define do
     description { 'おいしいりんごです' }
     hidden { false }
     position { 1 }
+    merchant { create(:merchant) }
   end
 end

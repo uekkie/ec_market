@@ -25,6 +25,8 @@ gem 'acts_as_list'
 
 gem 'carrierwave'
 gem 'cloudinary'
+gem 'enumerize'
+gem 'gon'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -46,12 +48,15 @@ group :development do
   gem 'spring-commands-rspec'
   gem "letter_opener"
   gem 'letter_opener_web'
+  gem "erb2haml"
 end
 
 group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+  gem 'simplecov', require: false
+  gem 'stripe-ruby-mock', '~> 3.0.1', :require => 'stripe_mock'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

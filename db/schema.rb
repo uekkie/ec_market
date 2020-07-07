@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_30_004538) do
+ActiveRecord::Schema.define(version: 2020_07_01_145004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,22 @@ ActiveRecord::Schema.define(version: 2020_05_30_004538) do
     t.integer "position", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "merchant_id"
+    t.index ["merchant_id"], name: "index_items_on_merchant_id"
+  end
+
+  create_table "merchants", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "quantity_per_box", default: 5, null: false
+    t.index ["email"], name: "index_merchants_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_merchants_on_reset_password_token", unique: true
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -90,13 +106,17 @@ ActiveRecord::Schema.define(version: 2020_05_30_004538) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_point", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "merchant_id", null: false
+    t.integer "purchased_type", default: 0, null: false
+    t.index ["merchant_id"], name: "index_orders_on_merchant_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "title", default: "", null: false
-    t.text "content", default: "", null: false
+    t.string "title", null: false
+    t.text "content", null: false
     t.string "image"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -104,19 +124,26 @@ ActiveRecord::Schema.define(version: 2020_05_30_004538) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "shipping_addresses", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "address", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_shipping_addresses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "name", default: "", null: false
-    t.string "address", default: "", null: false
     t.string "stripe_customer_id", default: "", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "admin", default: false, null: false
-    t.string "nick_name", default: "", null: false
+    t.string "nick_name", null: false
     t.string "avatar"
     t.integer "point", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -130,8 +157,11 @@ ActiveRecord::Schema.define(version: 2020_05_30_004538) do
   add_foreign_key "coupons", "users"
   add_foreign_key "goods", "posts"
   add_foreign_key "goods", "users"
+  add_foreign_key "items", "merchants"
   add_foreign_key "order_items", "items"
   add_foreign_key "order_items", "orders"
+  add_foreign_key "orders", "merchants"
   add_foreign_key "orders", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "shipping_addresses", "users"
 end

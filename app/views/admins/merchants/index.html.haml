@@ -1,0 +1,16 @@
+=link_to '新規追加', new_merchant_registration_path
+
+%table.table.table-striped
+  %thead
+    %th 業者名
+    %th メールアドレス
+    %th
+  %tbody
+    - @merchants.each do |merchant|
+      %tr
+        %td= link_to merchant.name, admins_merchant_path(merchant)
+        %td= merchant.email
+        %td
+          = link_to '編集', edit_admins_merchant_path(merchant)
+          %br
+          = link_to '削除', admins_merchant_path(merchant), method: :delete, data: { confirm: '削除してよろしいですか？' }

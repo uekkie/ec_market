@@ -1,3 +1,7 @@
 %h1 #{@item.name}
 
 = render 'items/item', item: @item
+- if ( user_signed_in? && current_user.admin? )
+  .item-actions
+    =link_to '編集', edit_admins_item_path(@item)
+    =link_to '削除', admins_item_path(@item), method: :delete, data: {confirm: '削除しますか？'}

@@ -1,4 +1,5 @@
-class CommentsController < ApplicationController
+class Posts::CommentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_post
   before_action :set_comment, only: %i[destroy]
 
@@ -10,7 +11,7 @@ class CommentsController < ApplicationController
 
     if @comment.save
       unless @post.author?(@comment.user)
-        CommentMailer.with(comment: @comment).commented.deliver_later
+        CommentMailer.commented(@comment).deliver_later
       end
       redirect_to user_post_url(@post.user, @post), notice: 'コメントを作成しました'
     else

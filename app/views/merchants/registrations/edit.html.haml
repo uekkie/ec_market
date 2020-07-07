@@ -1,0 +1,21 @@
+%h2 #{t('activerecord.model.mercahnt')}の編集
+
+= simple_form_for(@merchant, url: registration_path(@merchant), html: { method: :put }) do |f|
+  = render "devise/shared/error_messages", resource: resource
+  .form-inputs
+    = f.input :name, autofocus: true, autocomplete: "name"
+  .form-inputs
+    = f.input :email, as: :email, autocomplete: "email"
+  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+    %div
+      次のメールアドレスの確認を待っています: #{resource.unconfirmed_email}
+  .form-inputs
+    = f.input :password, as: :password, autocomplete: "new-password", hint: "(変更しない場合は空白のままにします)"
+  .form-inputs
+    = f.input :password_confirmation, as: :password, autocomplete: "new-password"
+  .form-inputs
+    = f.input :current_password, as: :password, autocomplete: "current-password"
+  .form-actions
+    = f.submit "更新する", class: 'btn btn-primary'
+
+= link_to 'キャンセル', teachers_path
