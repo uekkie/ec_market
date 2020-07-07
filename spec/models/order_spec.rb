@@ -145,8 +145,9 @@ RSpec.describe Order, type: :model do
         prev_stripe_id = build_order.user.stripe_customer_id
 
         expect {
-          expect(build_order.save_and_charge(false, stripe_helper.generate_card_token)).to be_falsey
-          expect(build_order.errors[:base].first).to eq 'Stripeでの決済に失敗しました。カード情報を確認してください。'
+          expect {
+            build_order.save_and_charge(false, stripe_helper.generate_card_token)
+          }.to raise_error(Stripe::CardError)
         }.to change { Order.count }.by(0)
         user.reload
         expect(user.stripe_customer_id).to eq prev_stripe_id
