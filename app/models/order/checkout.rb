@@ -11,10 +11,8 @@ class Order::Checkout
 
   def create!
     Order.transaction(joinable: false, requires_new: true) do
-      User.transaction(joinable: false, requires_new: true) do
-        order.save!
-        checkout!
-      end
+      order.save!
+      checkout!
     end
     true
   end
