@@ -5,17 +5,13 @@ class Admins::CouponsController < ApplicationController
     @coupons = Coupon.recent
   end
 
-  def show
-
-  end
+  def show; end
 
   def new
     @coupon = Coupon.new
   end
 
-  def edit
-  end
-
+  def edit; end
 
   def create
     @coupon = Coupon.new(coupon_params)
@@ -26,7 +22,6 @@ class Admins::CouponsController < ApplicationController
       render :new
     end
   end
-
 
   def update
     if @coupon.update(coupon_params)

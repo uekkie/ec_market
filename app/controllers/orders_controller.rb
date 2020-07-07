@@ -20,9 +20,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    if current_cart.empty?
-      redirect_to new_order_url, alert: 'カートに商品がありません'
-    end
+    redirect_to new_order_url, alert: 'カートに商品がありません' if current_cart.empty?
 
     @order = current_user.orders.build(order_params) do |order|
       order.build_order_items(current_cart, order.merchant.id)
@@ -41,9 +39,8 @@ class OrdersController < ApplicationController
   private
 
   def save_order(order)
-    if order.purchased_type.credit_card?
-      return order.save_and_charge(params[:use_registered_id], params[:stripeToken])
-    end
+    return order.save_and_charge(params[:use_registered_id], params[:stripeToken]) if order.purchased_type.credit_card?
+
     order.save
   end
 

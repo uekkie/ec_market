@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "日記", type: :system do
+RSpec.describe '日記', type: :system do
   let!(:user) { create(:user) }
   before { sign_in user }
   describe '投稿' do
@@ -9,9 +9,9 @@ RSpec.describe "日記", type: :system do
       expect(current_path).to eq new_post_path
       fill_in 'タイトル', with: '栽培キットを買った'
       fill_in '本文', with: '今日から日記をつけていく！'
-      expect {
+      expect do
         click_on '登録する'
-      }.to change { Post.count }.by(1)
+      end.to change { Post.count }.by(1)
     end
 
     it '正しくない値は再入力する' do
@@ -29,7 +29,6 @@ RSpec.describe "日記", type: :system do
   let(:post) { create(:post, user: user, title: 'おはようｇざいます', content: '1日目のログ。') }
 
   describe '更新' do
-
     it '更新できる' do
       visit edit_user_post_path(post.user, post)
 
@@ -61,12 +60,12 @@ RSpec.describe "日記", type: :system do
     visit user_post_path(post.user, post)
 
     within first('.post-actions') do
-      expect {
+      expect do
         click_on '削除'
         expect(page.driver.browser.switch_to.alert.text).to eq '削除しますか？'
         page.accept_confirm
         sleep 0.5
-      }.to change { Post.count }.by(-1)
+      end.to change { Post.count }.by(-1)
     end
     expect(current_path).to eq posts_path
     expect(page).to have_content '削除しました'

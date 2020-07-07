@@ -16,8 +16,7 @@ class Users::PostsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @post.update(post_params)
@@ -41,5 +40,4 @@ class Users::PostsController < ApplicationController
   def set_post
     @post = current_user.posts.find(params[:id])
   end
-
 end

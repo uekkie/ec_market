@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe "Items", type: :system do
+RSpec.describe 'Items', type: :system do
   describe '商品' do
     describe '管理者' do
       let!(:admin) { create(:admin) }
-      before {
+      before do
         sign_in admin
-      }
+      end
       it '登録ができる' do
         visit admins_items_path
         click_on '商品の追加'
@@ -15,19 +15,19 @@ RSpec.describe "Items", type: :system do
         fill_in '価格', with: '1000'
         fill_in '説明', with: '伯方で取れた極上の塩'
 
-        expect {
+        expect do
           click_on '登録する'
           expect(page).to have_content '伯方の塩を登録しました'
-        }.to change { Item.count }.by(1)
+        end.to change { Item.count }.by(1)
       end
 
       it '登録失敗' do
         visit new_admins_item_path
 
-        expect {
+        expect do
           click_on '登録する'
           expect(page).to have_content '商品名を入力してください'
-        }.to change { Item.count }.by(0)
+        end.to change { Item.count }.by(0)
       end
 
       it '変更ができる' do
@@ -52,22 +52,22 @@ RSpec.describe "Items", type: :system do
 
         fill_in '価格', with: ''
 
-        expect {
+        expect do
           click_on '更新する'
           expect(page).to have_content '価格を入力してください'
-        }.to change { Item.count }.by(0)
+        end.to change { Item.count }.by(0)
       end
 
       it '削除ができる', js: true do
         item = create(:item, name: 'みかん', price: 200)
         visit admins_item_path(item)
 
-        expect {
+        expect do
           click_on '削除'
           expect(page.driver.browser.switch_to.alert.text).to eq '削除しますか？'
           page.accept_confirm
           expect(page).to have_content 'みかんを削除しました'
-        }.to change { Item.count }.by(-1)
+        end.to change { Item.count }.by(-1)
       end
 
       it '商品の並び替え' do

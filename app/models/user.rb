@@ -23,6 +23,7 @@ class User < ApplicationRecord
 
   def charge_coupon(coupon)
     return '使用済みのコードです' if coupon.used?
+
     ActiveRecord::Base.transaction do
       self.point += coupon.point
       save!
@@ -35,7 +36,7 @@ class User < ApplicationRecord
     save!
   end
 
-  def has_customer_id?
+  def customer_id?
     stripe_customer_id.present?
   end
 
@@ -48,17 +49,18 @@ class User < ApplicationRecord
       email: email,
       source: stripe_token
     )
-    self.update!(stripe_customer_id: customer.id)
+    update!(stripe_customer_id: customer.id)
     customer
   end
 
   def charge(customer, price)
     return false unless customer.present?
+
     Stripe::Charge.create(
-      :customer => customer.id,
-      :amount => price,
-      :description => "商品代金",
-      :currency => "jpy"
+      customer: customer.id,
+      amount: price,
+      description: '商品代金',
+      currency: 'jpy'
     )
   end
 end

@@ -11,11 +11,12 @@ module SystemHelper
 
   def take_failed_screenshot
     return if @is_failed_screenshot_taken
+
     super
     @is_failed_screenshot_taken = true
   end
 
-  def fill_stripe_elements(card:, expiry: '1234', cvc: '123', postal: '12345', selector: '#card-element > div > iframe')
+  def fill_stripe_elements(card:, expiry: '1234', cvc: '123', selector: '#card-element > div > iframe')
     find_frame(selector) do
       card.to_s.chars.each do |piece|
         find_field('cardnumber').send_keys(piece)
@@ -33,7 +34,7 @@ module SystemHelper
       sleep 1
 
       find_frame('#challengeFrame') do
-        click_on "Complete authentication"
+        click_on 'Complete authentication'
       end
     end
   end
@@ -45,7 +46,7 @@ module SystemHelper
       sleep 1
 
       find_frame('#challengeFrame') do
-        click_on "Fail authentication"
+        click_on 'Fail authentication'
       end
     end
   end
@@ -64,4 +65,3 @@ end
 RSpec.configure do |config|
   config.include SystemHelper, type: :system
 end
-

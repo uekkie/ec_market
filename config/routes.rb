@@ -1,16 +1,15 @@
 Rails.application.routes.draw do
-
   devise_for :users, controllers: {
-      registrations: 'users/registrations',
+    registrations: 'users/registrations'
 
   }
 
   devise_for :merchants, controllers: {
-      registrations: 'merchants/registrations',
-      sessions:      'merchants/sessions',
+    registrations: 'merchants/registrations',
+    sessions: 'merchants/sessions'
   }
 
-  root to: "posts#index"
+  root to: 'posts#index'
   resources :items, only: %i[index show]
 
   namespace :admins do
@@ -60,7 +59,5 @@ Rails.application.routes.draw do
     get :profile, action: :profile, on: :collection
   end
 
-  if Rails.env.development?
-    mount LetterOpenerWeb::Engine, at: '/lo'
-  end
+  mount LetterOpenerWeb::Engine, at: '/lo' if Rails.env.development?
 end

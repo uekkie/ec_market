@@ -1,14 +1,13 @@
 class Users::CouponsController < ApplicationController
-  def index
-
-  end
+  def index; end
 
   def new
     @coupon = Coupon.new
   end
 
   def create
-    if @coupon = Coupon.find_by(code: params[:coupon][:code])
+    @coupon = Coupon.find_by(code: params[:coupon][:code])
+    if @coupon
       if @coupon.used?
         @coupon.errors.add(:code, 'コードはすでに使用されています')
         render :new

@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :comment do
     user { nil }
     post { nil }
-    body { "" }
+    body { '' }
   end
 end

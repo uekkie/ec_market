@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "日記コメント", type: :system do
+RSpec.describe '日記コメント', type: :system do
   let!(:user) { create(:user) }
   let!(:post) { create(:post, user: user) }
   let!(:commented_user) { create(:user) }
@@ -11,9 +11,9 @@ RSpec.describe "日記コメント", type: :system do
       it 'コメントできる' do
         visit user_post_path(post.user, post)
         fill_in '本文', with: 'いいですね！'
-        expect {
+        expect do
           click_on 'コメントする'
-        }.to change { Comment.count }.by(1)
+        end.to change { Comment.count }.by(1)
       end
     end
   end
@@ -25,12 +25,12 @@ RSpec.describe "日記コメント", type: :system do
       it '削除できる', js: true do
         visit user_post_path(post.user, post)
         within first('.comments') do
-          expect {
+          expect do
             click_on '削除'
             expect(page.driver.browser.switch_to.alert.text).to eq '削除しますか？'
             page.accept_confirm
             expect(current_path).to eq user_post_path(post.user, post)
-          }.to change { Comment.count }.by(-1)
+          end.to change { Comment.count }.by(-1)
         end
       end
     end

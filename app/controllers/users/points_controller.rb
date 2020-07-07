@@ -1,5 +1,4 @@
 class Users::PointsController < ApplicationController
-
   def index
     @users = User.normal.recent
   end

@@ -5,11 +5,11 @@ RSpec.describe Order, type: :model do
   let!(:merchant) { create(:merchant) }
   let!(:item) { create(:item) }
 
-  let!(:order) {
+  let!(:order) do
     create(:order, user: user, merchant: merchant) do |order|
       order.order_items.create(item: item, quantity: 2)
     end
-  }
+  end
 
   describe '注文のステータス' do
     it '作成後は「注文済み」になる' do
@@ -17,7 +17,6 @@ RSpec.describe Order, type: :model do
     end
 
     context '業者がステータスを更新したとき' do
-
       it '発送準備にすると「発送処理中」になる' do
         merchant.prepare_shipping(order)
         expect(order.status).to eq 'prepare_shipping'
@@ -33,19 +32,18 @@ RSpec.describe Order, type: :model do
         expect(order.status).to eq 'canceled'
       end
     end
-
   end
 
   describe '送料' do
     it '業者Aは5商品ごとに600円の送料が発生する' do
       merchant_a = create(:merchant, quantity_per_box: 5)
 
-      order = create(:order, user: user, merchant: merchant_a) do |order|
+      order6items = create(:order, user: user, merchant: merchant_a) do |order|
         order.order_items.create(item: item, quantity: 6)
       end
 
-      expect(order.postage).to eq 1200
-      expect(order.total_with_tax).to eq 3560
+      expect(order6items.postage).to eq 1200
+      expect(order6items.total_with_tax).to eq 3560
     end
 
     it '業者Bは8商品ごとに600円の送料が発生する' do
@@ -94,12 +92,12 @@ RSpec.describe Order, type: :model do
   describe 'Stripe決済' do
     let(:stripe_helper) { StripeMock.create_test_helper }
 
-    let!(:build_order) {
+    let!(:build_order) do
       build(:order, user: user, merchant: item.merchant) do |order|
         order.order_items.build(item: item, quantity: 2)
         order.purchased_type = :credit_card
       end
-    }
+    end
 
     before { StripeMock.start }
     after { StripeMock.stop }
@@ -125,43 +123,43 @@ RSpec.describe Order, type: :model do
           email: user.email,
           source: stripe_helper.generate_card_token
         )
-        expect {
+        expect do
           Order::Checkout.create!(user: user, order: build_order, customer: customer)
-        }.to raise_error(Stripe::CardError)
+        end.to raise_error(Stripe::CardError)
       end
     end
 
     describe '#save_and_charge' do
-      it "クレジットカード決済が成功すること" do
-        expect {
+      it 'クレジットカード決済が成功すること' do
+        expect do
           expect(build_order.save_and_charge(false, stripe_helper.generate_card_token)).to be_truthy
           expect(build_order.user.stripe_customer_id).to_not be_empty
-        }.to change { Order.count }.by(1)
+        end.to change { Order.count }.by(1)
       end
 
-      it "カードが不正なとき、注文が失敗すること" do
+      it 'カードが不正なとき、注文が失敗すること' do
         StripeMock.prepare_card_error(:card_declined)
 
         prev_stripe_id = build_order.user.stripe_customer_id
 
-        expect {
-          expect(build_order.save_and_charge(false, stripe_helper.generate_card_token)).to be_falsey
-          expect(build_order.errors[:base].first).to eq 'Stripeでの決済に失敗しました。カード情報を確認してください。'
-        }.to change { Order.count }.by(0)
+        expect do
+          expect do
+            build_order.save_and_charge(false, stripe_helper.generate_card_token)
+          end.to raise_error(Stripe::CardError)
+        end.to change { Order.count }.by(0)
         user.reload
         expect(user.stripe_customer_id).to eq prev_stripe_id
       end
 
-      it "以前と同じカードで決済できること" do
-
+      it '以前と同じカードで決済できること' do
         build_order.user.update!(stripe_customer_id: Stripe::Customer.create(
           email: user.email,
           source: stripe_helper.generate_card_token
         ).id)
 
-        expect {
+        expect do
           expect(build_order.save_and_charge(true, stripe_helper.generate_card_token)).to be_truthy
-        }.to change { Order.count }.by(1)
+        end.to change { Order.count }.by(1)
       end
     end
   end

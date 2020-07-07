@@ -5,15 +5,13 @@ class Admins::ItemsController < Admins::ApplicationController
     @items = Item.listed
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @item = Item.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @item = Item.new(item_params)

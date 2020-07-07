@@ -9,15 +9,15 @@ class Coupon < ApplicationRecord
   end
 
   def display_code
-    self.code.scan(/.{1,4}/).join('-')
+    code.scan(/.{1,4}/).join('-')
   end
 
   def display_used
-    self.used? ? '使用済み' : '未使用'
+    used? ? '使用済み' : '未使用'
   end
 
   def used?
-    self.user.present?
+    user.present?
   end
 
   private
@@ -25,5 +25,4 @@ class Coupon < ApplicationRecord
   def generate_code
     self.code = SecureRandom.hex(6).upcase
   end
-
 end

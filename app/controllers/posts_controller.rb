@@ -5,13 +5,11 @@ class PostsController < ApplicationController
     @posts = Post.recent
   end
 
-  def show
-  end
+  def show; end
 
   private
 
   def set_post
     @post = Post.find(params[:id])
   end
-
 end

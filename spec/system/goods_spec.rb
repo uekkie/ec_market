@@ -7,9 +7,9 @@ RSpec.describe 'Goods', type: :system do
   it 'Goodがつけられる' do
     sign_in user
     visit user_post_path(post.user, post)
-    expect {
+    expect do
       click_on 'Good!'
-    }.to change { Good.count }.by(1)
+    end.to change { Good.count }.by(1)
   end
 
   it 'Goodを解除できる' do
@@ -17,9 +17,8 @@ RSpec.describe 'Goods', type: :system do
     post.goods.create!(user: user)
 
     visit user_post_path(post.user, post)
-    expect {
+    expect do
       click_on 'Good解除'
-    }.to change { Good.count }.by(-1)
+    end.to change { Good.count }.by(-1)
   end
-
 end

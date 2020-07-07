@@ -19,7 +19,7 @@
 
   = f.input :purchased_type, as: :radio_buttons, id: 'purchased_type'
 
-  - if @order.user.has_customer_id?
+  - if @order.user.customer_id?
     .form-row
       = check_box_tag(:use_registered_card)
       = label_tag(:use_registered_card, "以前と同じカードで支払う")
