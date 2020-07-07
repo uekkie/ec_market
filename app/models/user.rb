@@ -5,17 +5,20 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   mount_uploader :avatar, ImageUploader
-  has_many :orders
+  has_many :orders, dependent: :destroy
   has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :goods, dependent: :destroy
 
   has_many :coupons, dependent: :destroy
+
+  has_one :shipping_address, dependent: :destroy, class_name: 'ShippingAddress'
 
   scope :normal, -> { where(admin: false) }
   scope :recent, -> { order(created_at: :desc) }
 
   def display_name
-    name.present? ? name : email
+    nick_name.present? ? nick_name : email
   end
 
   def charge_coupon(coupon)
@@ -30,5 +33,32 @@ class User < ApplicationRecord
   def use_point(order)
     self.point -= order.user_point
     save!
+  end
+
+  def has_customer_id?
+    stripe_customer_id.present?
+  end
+
+  def customer
+    return Stripe::Customer.retrieve(stripe_customer_id) if stripe_customer_id.present?
+  end
+
+  def attach_customer(stripe_token)
+    customer = Stripe::Customer.create(
+      email: email,
+      source: stripe_token
+    )
+    self.update!(stripe_customer_id: customer.id)
+    customer
+  end
+
+  def charge(customer, price)
+    return false unless customer.present?
+    Stripe::Charge.create(
+      :customer => customer.id,
+      :amount => price,
+      :description => "商品代金",
+      :currency => "jpy"
+    )
   end
 end

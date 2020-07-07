@@ -1,11 +1,14 @@
 ja:
-  enums:
+  enumerize:
     order:
       status:
         ordered: '注文済み'
         prepare_shipping: '発送準備中'
         shipped: '発送済み'
         canceled: 'キャンセル'
+      purchased_type:
+        cash_on_delivery: '代金引換'
+        credit_card: 'クレジットカード'
   time:
     formats:
       short: "%Y年%m月%d日"
@@ -24,6 +27,9 @@ ja:
       post: 日記
       comment: コメント
     attributes:
+      user:
+        avatar: プロフィール画像
+        nick_name: ニックネーム
       item:
         name: 商品名
         price: 価格
@@ -39,6 +45,8 @@ ja:
         ship_date: 配達日
         user_point: ポイント
         satus: 注文の状態
+        purchased_type: 支払い方法
+
       post:
         title: タイトル
         content: 本文
@@ -52,6 +60,7 @@ ja:
       merchant:
         name: 業者名
         email: メールアドレス
+        quantity_per_box: １箱あたりの商品点数
         password: パスワード
         password_confirmation: パスワード確認
         current_password: 現在のパスワード

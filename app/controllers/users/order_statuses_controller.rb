@@ -4,7 +4,7 @@ class Users::OrderStatusesController < ApplicationController
   def update
     order = current_user.orders.find(params[:id])
     if order.update(order_params)
-      redirect_to orders_url, notice: "注文番号#{order.id}を#{order.status_i18n}しました"
+      redirect_to orders_url, notice: "注文番号#{order.id}を#{order.status_text}しました"
     else
       redirect_to orders_url, alert: '変更できませんでした'
     end

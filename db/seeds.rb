@@ -1,9 +1,9 @@
 if User.count == 0
-  User.create(email: 'yamada@example.com', password: 'aaaaaa', password_confirmation: 'aaaaaa')
+  User.create(nick_name: 'やまだ', email: 'yamada@example.com', password: 'aaaaaa', password_confirmation: 'aaaaaa')
 end
 
 if User.where(admin: true).count == 0
-  User.create(email: 'admin@example.com', password: 'aaaaaa', password_confirmation: 'aaaaaa', admin: true)
+  User.create(nick_name: 'アドミン', email: 'admin@example.com', password: 'aaaaaa', password_confirmation: 'aaaaaa', admin: true)
 end
 
 if Merchant.count == 0

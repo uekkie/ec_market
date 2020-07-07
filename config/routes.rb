@@ -30,8 +30,8 @@ Rails.application.routes.draw do
 
   resources :orders, only: %i[index show new create]
 
-  resources :posts, only: :index
-
+  resources :posts, only: %i[index]
+  resources :posts, module: :users, only: %i[new]
 
   namespace :users do
     resources :coupons
@@ -41,10 +41,12 @@ Rails.application.routes.draw do
 
   resources :users do
     get :profile, action: :profile, on: :collection
-    resources :posts do
-      resources :comments
+    resources :posts, module: :users, only: %i[create edit update destroy]
+    resources :posts, only: %i[show] do
+      resources :comments, module: :posts, only: %i[create destroy]
       resources :goods, only: %i[create destroy]
     end
+    resources :charges, module: :users, only: %i[new create]
   end
 
   namespace :admins do
@@ -54,7 +56,9 @@ Rails.application.routes.draw do
   namespace :merchants do
     resources :items
   end
-  resources :merchants, only: [:show]
+  resources :merchants, only: %i[show update] do
+    get :profile, action: :profile, on: :collection
+  end
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: '/lo'

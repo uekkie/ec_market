@@ -19,7 +19,7 @@ class Admins::ItemsController < Admins::ApplicationController
     @item = Item.new(item_params)
 
     if @item.save
-      redirect_to admins_items_url, notice: '商品を登録しました'
+      redirect_to admins_items_url, notice: "#{@item.name}を登録しました"
     else
       render :new
     end
@@ -27,7 +27,7 @@ class Admins::ItemsController < Admins::ApplicationController
 
   def update
     if @item.update(item_params)
-      redirect_to admins_item_path(@item), notice: '変更しました'
+      redirect_to admins_item_path(@item), notice: "#{@item.name}を変更しました"
     else
       render :edit
     end

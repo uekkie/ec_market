@@ -1,8 +1,5 @@
 %h1 商品一覧
 
 - @items.each do |item|
-  .card.mt-2.mb-2{style:"width: 20rem;"}
-    = render 'item_image', item: item
-    .card-body
-      %h5.card-title= link_to item.name, item_path(item)
-      %p.card-text= item.description
+  = render 'item', item: item, navigate_item: true
+
