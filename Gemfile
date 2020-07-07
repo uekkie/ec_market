@@ -56,6 +56,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
   gem 'simplecov', require: false
+  gem 'stripe-ruby-mock', '~> 3.0.1', :require => 'stripe_mock'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

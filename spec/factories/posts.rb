@@ -1,8 +1,7 @@
 FactoryBot.define do
   factory :post do
-    user { nil }
-    title { "MyString" }
-    content { "MyText" }
-    image { "MyString" }
+    user { create(:user) }
+    title { "サンプルポスト" }
+    content { "本文サンプル" }
   end
 end
