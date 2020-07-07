@@ -2,9 +2,7 @@ class Order < ApplicationRecord
   extend Enumerize
 
   before_validation do
-    if self.user_point > self.user.point
-      self.errors.add(:user_point, '上限を超えています')
-    end
+    errors.add(:user_point, '上限を超えています') if user_point > user.point
 
     self.total_price = total_with_tax - user_point
   end
@@ -15,10 +13,6 @@ class Order < ApplicationRecord
 
   validates :address, :ship_time, :ship_date, presence: true
 
-  # 注文済み
-  # 発送処理中
-  # 処理中発送済み
-  # キャンセル
   enumerize :status, in: { ordered: 0, prepare_shipping: 1, shipped: 2, canceled: 3 }, default: :ordered
 
   enumerize :purchased_type, in: { cash_on_delivery: 0, credit_card: 1 }, default: :cash_on_delivery
@@ -30,9 +24,7 @@ class Order < ApplicationRecord
   def build_order_items(cart, merchant_id)
     cart.filtered_merchant_id(merchant_id.to_i).each do |cart_item|
       order_items.build(item: cart_item.item, quantity: cart_item.quantity)
-      if self.merchant.nil?
-        self.merchant = cart_item.item.merchant
-      end
+      self.merchant = cart_item.item.merchant if merchant.nil?
     end
   end
 
@@ -49,14 +41,14 @@ class Order < ApplicationRecord
   end
 
   def tax_fee
-    (BigDecimal(total.to_s) * BigDecimal("0.08")).ceil
+    (BigDecimal(total.to_s) * BigDecimal('0.08')).ceil
   end
 
   def delivery_fee
-    return 0 if self.purchased_type.credit_card?
+    return 0 if purchased_type.credit_card?
 
     case subtotal
-    when 0...10000
+    when 0...10_000
       300
     when 10_000...30_000
       400
@@ -67,13 +59,12 @@ class Order < ApplicationRecord
     end
   end
 
-
   def postage
     ((amount / merchant.quantity_per_box) + 1) * POSTAGE_FEE
   end
 
   def total
-    total = subtotal + delivery_fee + postage
+    subtotal + delivery_fee + postage
   end
 
   def total_with_tax
@@ -81,31 +72,30 @@ class Order < ApplicationRecord
   end
 
   def prepare_shipping!
-    self.update!(status: :prepare_shipping)
+    update!(status: :prepare_shipping)
   end
 
   def shipped!
-    self.update!(status: :shipped)
+    update!(status: :shipped)
   end
 
   def canceled!
-    self.update!(status: :canceled)
+    update!(status: :canceled)
   end
 
-  def save_and_charge(use_registered_id, stripeToken)
+  def save_and_charge(use_registered_id, stripe_token)
     customer = if use_registered_id
-                 self.user.customer
+                 user.customer
                else
                  Stripe::Customer.create(
-                   email: self.user.email,
-                   source: stripeToken
+                   email: user.email,
+                   source: stripe_token
                  )
                end
-    Checkout.create!(user: self.user, order: self, customer: customer)
-
+    Checkout.create!(user: user, order: self, customer: customer)
   rescue Stripe::CardError => e
     logger.error('[ERROR][Orders#save_and_change] Stripeでの決済に失敗しました。' + e.message)
-    self.errors.add(:base, 'Stripeでの決済に失敗しました。カード情報を確認してください。')
+    errors.add(:base, 'Stripeでの決済に失敗しました。カード情報を確認してください。')
     raise e
   end
 end

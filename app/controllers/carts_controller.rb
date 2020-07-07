@@ -11,18 +11,18 @@ class CartsController < ApplicationController
     end
 
     @cart_item.quantity += params[:cart_item][:quantity].to_i
-    @cart_item.save
+    @cart_item.save!
 
     redirect_to item_url(@cart_item.item), notice: "カートに#{@cart_item.item.name}を追加しました！"
   end
 
   def update_item
-    @cart_item.update(quantity: params[:quantity].to_i)
+    @cart_item.update!(quantity: params[:quantity].to_i)
     redirect_to cart_url
   end
 
   def delete_item
-    @cart_item.destroy
+    @cart_item.destroy!
     redirect_to cart_url
   end
 

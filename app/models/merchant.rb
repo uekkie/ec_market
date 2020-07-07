@@ -4,7 +4,6 @@ class Merchant < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-
   scope :recent, -> { order(created_at: :desc) }
 
   has_many :items, dependent: :destroy

@@ -20,9 +20,7 @@ class Order::Checkout
   private
 
   def checkout!
-    unless customer
-      raise 'Stripeでの決済に失敗しました。カード情報を確認してください。'
-    end
+    raise 'Stripeでの決済に失敗しました。カード情報を確認してください。' unless customer
 
     user.charge(customer,
                 order.total_with_tax)

@@ -5,15 +5,13 @@ class Merchants::ItemsController < Merchants::ApplicationController
     @items = current_merchant.items.recent
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @item = current_merchant.items.build
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @item = current_merchant.items.build(item_params)
@@ -48,4 +46,3 @@ class Merchants::ItemsController < Merchants::ApplicationController
     @item = Item.find(params[:id])
   end
 end
-

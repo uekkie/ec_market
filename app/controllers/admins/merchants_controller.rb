@@ -1,5 +1,4 @@
 class Admins::MerchantsController < Admins::ApplicationController
-
   def index
     @merchants = Merchant.recent
   end

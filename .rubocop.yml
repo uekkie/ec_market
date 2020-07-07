@@ -1,0 +1,79 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "db/schema.rb"
+
+Layout/ArgumentAlignment:
+  Exclude:
+    - 'bin/webpack'
+    - 'bin/webpack-dev-server'
+
+Layout/EmptyLineAfterMagicComment:
+  Exclude:
+    - 'config/initializers/simple_form.rb'
+
+Layout/EmptyLines:
+  Exclude:
+    - 'config/initializers/simple_form_bootstrap.rb'
+
+Layout/HashAlignment:
+  Exclude:
+    - 'config/initializers/simple_form.rb'
+    - 'config/initializers/simple_form_bootstrap.rb'
+
+Lint/UnusedBlockArgument:
+  Exclude:
+    - 'config/initializers/simple_form_bootstrap.rb'
+
+Style/Lambda:
+  Exclude:
+    - 'config/initializers/simple_form_bootstrap.rb'
+
+Style/RedundantBegin:
+  Exclude:
+    - 'bin/yarn'
+
+Style/StderrPuts:
+  Exclude:
+    - 'bin/yarn'
+
+Style/StringLiterals:
+  Exclude:
+    - 'bin/webpack'
+    - 'bin/webpack-dev-server'
+    - 'bin/yarn'
+    - 'config/puma.rb'
+    - 'config/spring.rb'
+    - 'db/schema.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*.rb'
+  Max: 15
+
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/*.rb'
+  Max: 20
+
+Layout/LineLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/**/*'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false

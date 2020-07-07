@@ -6,6 +6,6 @@ class CreateGoods < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
-    add_index :goods, [:user_id, :post_id], unique: true
+    add_index :goods, %i[user_id post_id], unique: true
   end
 end

@@ -19,12 +19,11 @@ class Merchants::RegistrationsController < Devise::RegistrationsController
     raise 'アクセス権限がありません' unless admin_signed_in?
   end
 
-  def after_sign_up_path_for(resource)
+  def after_sign_up_path_for(_resource)
     admins_merchants_path
   end
 
-  def after_update_path_for(resource)
+  def after_update_path_for(_resource)
     admins_merchants_path
   end
-
 end
