@@ -19,6 +19,8 @@ class Order::Checkout
     true
   end
 
+  private
+
   def checkout!
     unless customer
       raise 'Stripeでの決済に失敗しました。カード情報を確認してください。'
@@ -28,8 +30,6 @@ class Order::Checkout
                 order.total_with_tax)
     user.update!(stripe_customer_id: customer.id)
   end
-
-  private
 
   attr_reader :order, :user, :customer
 end
