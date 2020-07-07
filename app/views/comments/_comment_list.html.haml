@@ -1,0 +1,7 @@
+.comments
+  %ul.list-group
+    - comments.each do |comment|
+      %li.list-group-item
+        = comment.body
+        - if current_user && comment.user == current_user
+          =link_to '削除', user_post_comment_path(comment.user, comment.post, comment), method: :delete, data: {confirm: '削除しますか？'}

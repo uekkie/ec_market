@@ -1,0 +1,20 @@
+%h1 クーポンコードの管理
+
+= link_to 'クーポンコードを発行', new_admins_coupon_path, class: 'btn btn-primary'
+
+%table.table.table-striped
+  %thead
+    %th コード
+    %th ポイント数
+    %th 使用済み
+    %th 使用したユーザー
+    %th
+  %tbody
+    - @coupons.each do |coupon|
+      %tr
+        %td= link_to coupon.display_code, admins_coupon_path(coupon)
+        %td= coupon.point
+        %td= coupon.display_used
+        %td= coupon.user.display_name if coupon.used?
+        %td
+          =link_to '削除', admins_coupon_path(coupon), method: :delete, data: {confirm: '削除しますか？'}

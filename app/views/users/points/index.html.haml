@@ -1,0 +1,15 @@
+%h1 ユーザーのポイント一覧
+
+
+%table.table.table-striped
+  %thead
+    %th ユーザー名
+    %th ポイント数
+    %th
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.display_name
+        %td= user.point
+        %td
+          =link_to '変更', edit_users_point_path(user)

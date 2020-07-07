@@ -1,0 +1,12 @@
+%h1 日記の一覧
+
+- @posts.each do |post|
+  .card.mt-2.mb-2{style:"width: 20rem;"}
+    .card-body
+      %h5.card-title= link_to post.title, user_post_path(post.user, post)
+      %p.card-text= post.content
+      %p.card-text= post.user.email
+      .images
+        - if post.image.present?
+          = image_tag post.image.to_s, size: '50x50'
+      = render 'posts/actions', post: post

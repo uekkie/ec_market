@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+      registrations: 'users/registrations'
+  }
 
-  root to: "items#index"
+  root to: "posts#index"
   resources :items, only: %i[index show]
 
   namespace :admins do
@@ -11,6 +13,7 @@ Rails.application.routes.draw do
         post :down_position
       end
     end
+    resources :coupons
   end
 
   resource :cart, only: [:show]
@@ -19,4 +22,24 @@ Rails.application.routes.draw do
   delete '/delete_item' => 'carts#delete_item'
 
   resources :orders, only: %i[index show new create]
+
+  resources :posts, only: :index
+
+
+  namespace :users do
+    resources :coupons
+    resources :points, only: %i[index edit update]
+  end
+
+  resources :users do
+    get :profile, action: :profile, on: :collection
+    resources :posts do
+      resources :comments
+      resources :goods, only: %i[create destroy]
+    end
+  end
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: '/lo'
+  end
 end

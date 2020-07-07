@@ -27,6 +27,7 @@ class OrdersController < ApplicationController
     end
 
     if @order.save
+      current_user.use_point(@order)
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'
     else
@@ -37,6 +38,6 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(%i[address ship_time ship_date])
+    params.require(:order).permit(%i[address ship_time ship_date user_point])
   end
 end

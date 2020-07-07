@@ -1,0 +1,18 @@
+%h1 クーポンコード
+
+%table.table.table-striped
+  %thead
+    %th コード
+    %th ポイント数
+    %th 使用済み
+    %th 発行日
+    %th
+  %tbody
+    %tr
+      %td= @coupon.display_code
+      %td= @coupon.point
+      %td= @coupon.display_used
+      %td= l(@coupon.created_at, formats: :short)
+      %td
+        = link_to '変更', edit_admins_coupon_path(@coupon)
+        = link_to '削除', admins_coupons_path(@coupon), method: :delete, data: {confirm: '削除してよろしいですか？'}

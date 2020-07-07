@@ -1,0 +1,4 @@
+%h1= "#{@post.title}にGoodが付きました"
+%p 投稿者:#{@good.user.name}
+
+%p= link_to '日記を確認する', user_post_url(@post.user, @post)

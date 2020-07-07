@@ -1,0 +1,31 @@
+%h3 ユーザー情報
+= link_to '編集', edit_registration_path(@user)
+#avatar_name
+  %span
+    = link_to @user.avatar_url, target: :_blank do
+      = image_tag @user.avatar_url(:thumbnail), class: 'rounded img-thumbnail' if @user.avatar.present?
+  .form-inputs
+    = @user.name
+  .form-inputs
+    = @user.nick_name
+  .form-inputs
+    = @user.email
+
+.coupons_form
+  = "ポイント数: #{@user.point}"
+  =link_to 'クーポンコードを入力', new_users_coupon_path
+
+
+%h3 クーポン履歴
+#coupon-histories
+  %table.table.table-striped
+    %thead
+      %th ポイント
+      %th コード
+      %th 獲得日
+    %tbody
+      - @user.coupons.each do |coupon|
+        %tr
+          %td= coupon.point
+          %td= coupon.display_code
+          %td= l(coupon.updated_at, formats: :short)
