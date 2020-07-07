@@ -106,9 +106,9 @@ class Order < ApplicationRecord
   rescue Stripe::CardError => e
     logger.error('[ERROR][Orders#save_and_change] Stripeでの決済に失敗しました。' + e.message)
     self.errors.add(:base, 'Stripeでの決済に失敗しました。カード情報を確認してください。')
-    return false
+    raise e
   rescue => e
     logger.error('[ERROR]' + e)
-    return false
+    raise e
   end
 end
