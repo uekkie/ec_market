@@ -93,16 +93,14 @@ class Order < ApplicationRecord
   end
 
   def save_and_charge(use_registered_id, stripeToken)
-    unless self.purchased_type.credit_card?
-      return self.save
-    end
-
-    customer = use_registered_id ?
-                 self.user.customer :
+    customer = if use_registered_id
+                 self.user.customer
+               else
                  Stripe::Customer.create(
                    email: self.user.email,
                    source: stripeToken
                  )
+               end
     Checkout.create!(user: self.user, order: self, customer: customer)
 
   rescue Stripe::CardError => e

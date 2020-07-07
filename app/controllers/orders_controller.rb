@@ -29,7 +29,7 @@ class OrdersController < ApplicationController
       order
     end
 
-    if @order.save_and_charge(params[:use_registered_id], params[:stripeToken])
+    if save_order(@order)
       current_user.use_point(@order)
       clear_current_cart
       redirect_to root_url, notice: '注文を受け付けました！'
@@ -39,6 +39,13 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def save_order(order)
+    if order.purchased_type.credit_card?
+      return order.save_and_charge(params[:use_registered_id], params[:stripeToken])
+    end
+    order.save
+  end
 
   def order_params
     params.require(:order).permit(%i[address ship_time ship_date user_point merchant_id purchased_type])
